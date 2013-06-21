@@ -2,7 +2,7 @@ package microon.services.userdirectory
 
 import java.util.concurrent.Future
 
-trait UserDirectory {
+trait UserDirectoryService {
 
   // User existence
 

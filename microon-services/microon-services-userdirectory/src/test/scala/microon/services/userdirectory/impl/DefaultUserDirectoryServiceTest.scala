@@ -16,22 +16,22 @@ import microon.spi.scala.activeobject.ExecutorServiceActiveObjectDispatcher
 import microon.services.userdirectory.User
 
 @RunWith(classOf[JUnitRunner])
-class DefaultUserDirectoryTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
+class DefaultUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
 
   val mongoConfig = new MongodConfig(Version.Main.PRODUCTION, 27017, Network.localhostIsIPv6())
   val mongoDaemon = getDefaultInstance.prepare(mongoConfig).start()
   val mongo = new Mongo
 
-  var userDirectory: DefaultUserDirectory = _
+  var userDirectory: DefaultUserDirectoryService = _
 
   override def afterAll(configMap: Map[String, Any]) {
     mongoDaemon.stop()
   }
 
   before {
-    mongo.dropDatabase(DefaultUserDirectory.userDirectoryDBName)
+    mongo.dropDatabase(DefaultUserDirectoryService.userDirectoryDBName)
     val context = FunctionalConfigApplicationContext[TestConfig]
-    userDirectory = context.bean[DefaultUserDirectory].get
+    userDirectory = context.bean[DefaultUserDirectoryService].get
   }
 
   test("Should not find non-existing user.") {
@@ -104,7 +104,7 @@ class TestConfig extends FunctionalConfiguration with ContextSupport {
   bean()(new ExecutorServiceActiveObjectDispatcher(executor()))
 
   val mongoTemplate = bean() {
-    new MongoTemplate(new Mongo, DefaultUserDirectory.userDirectoryDBName)
+    new MongoTemplate(new Mongo, DefaultUserDirectoryService.userDirectoryDBName)
   }
-  bean()(new DefaultUserDirectory(mongoTemplate()))
+  bean()(new DefaultUserDirectoryService(mongoTemplate()))
 }
