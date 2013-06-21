@@ -1,1 +1,3 @@
-include 'microon-ri', 'microon-spi-scala'
+include 'microon-spi-scala', 'microon-ri',
+        'microon-services',
+        'microon-services:microon-services-userdirectory'

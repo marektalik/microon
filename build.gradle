@@ -27,6 +27,7 @@ subprojects {
         compile 'org.scala-lang:scala-library:2.10.1'
         compile 'javax.inject:javax.inject:1'
         compile 'org.slf4j:slf4j-api:1.7.5'
+        compile 'com.github.scalapi:scalapi-jdk:0.2-SNAPSHOT'
 
         testCompile 'junit:junit:4.11'
         testCompile 'org.scalatest:scalatest_2.10:1.9.1'
@@ -38,6 +39,7 @@ subprojects {
     repositories {
         mavenCentral()
         maven { url 'http://repo.springsource.org/snapshot' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 
     // Releasing
@@ -106,4 +108,17 @@ subprojects {
         }
     }
 
+}
+
+project('microon-services') {
+    project('microon-services-userdirectory') {
+        dependencies {
+            compile project(':microon-spi-scala')
+            compile 'org.springframework.data:spring-data-mongodb:1.1.0.RELEASE'
+            compile 'commons-logging:commons-logging:1.1.1'
+
+            testCompile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.33'
+            testCompile 'com.google.guava:guava:14.0.1'
+        }
+    }
 }
