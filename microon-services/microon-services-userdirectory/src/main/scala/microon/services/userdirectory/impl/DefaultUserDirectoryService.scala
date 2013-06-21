@@ -14,10 +14,11 @@ import DefaultUserDirectoryService.userCollectionName
 
 class DefaultUserDirectoryService(mongo: MongoTemplate) extends UserDirectoryService with ActiveObject {
 
-  def userExists(id: String): Boolean =
+  def userExists(id: String): Future[Boolean] = dispatch {
     mongo.count(id.toObjectIdQuery, userCollectionName) > 0
+  }
 
-  def createUser(initialProperties: Map[String, String] = Map.empty): String = {
+  def createUser(initialProperties: Map[String, String] = Map.empty): Future[String] = dispatch {
     mongo.execute(userCollectionName, new CollectionCallback[String] {
       def doInCollection(collection: DBCollection): String = {
         val user = new BasicDBObject()
@@ -28,18 +29,20 @@ class DefaultUserDirectoryService(mongo: MongoTemplate) extends UserDirectorySer
     })
   }
 
-  def loadUserProperties(id: String): Map[String, String] =
+  def loadUserProperties(id: String): Future[Map[String, String]] = dispatch {
     mongo.findOne(id.toObjectIdQuery, classOf[java.util.HashMap[String, String]], userCollectionName).toMap - "_id"
+  }
 
-  def loadUserProperty(id: String, property: String): Option[String] =
+  def loadUserProperty(id: String, property: String): Future[Option[String]] = dispatch {
     mongo.findOne(id.toObjectIdQuery, classOf[java.util.HashMap[String, String]], userCollectionName).toMap.
       get(property)
+  }
 
   def loadUserIdByProperty(propertyName: String, propertyValue: String): Future[Option[String]] = dispatch {
     mongo.findOne(new Query(where(propertyName).is(propertyValue)), classOf[java.util.HashMap[String, String]], userCollectionName).toMap.get("_id")
   }
 
-  def listUsersProperties(properties: Seq[String]): Seq[User] = {
+  def listUsersProperties(properties: Seq[String]): Future[Seq[User]] = dispatch {
     mongo.execute(userCollectionName, new CollectionCallback[Seq[User]] {
       def doInCollection(collection: DBCollection): Seq[User] = {
         val users = for (user <- collection.find.iterator()) yield {
@@ -52,7 +55,7 @@ class DefaultUserDirectoryService(mongo: MongoTemplate) extends UserDirectorySer
     })
   }
 
-  def updateUserProperties(id: String, properties: Map[String, String]) {
+  def updateUserProperties(id: String, properties: Map[String, String]) = void {
     mongo.updateFirst(id.toObjectIdQuery, new Update().evaluate(up => properties.foreach(kv => up.set(kv._1, kv._2))), userCollectionName)
   }
 

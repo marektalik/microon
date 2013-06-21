@@ -37,42 +37,42 @@ class DefaultUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with 
   test("Should not find non-existing user.") {
     expectResult(false) {
       val randomUserId = "123456789012345678901234"
-      userDirectory.userExists(randomUserId)
+      userDirectory.userExists(randomUserId).get
     }
   }
 
   test("Should find existing user.") {
-    val userId = userDirectory.createUser()
+    val userId = userDirectory.createUser().get
     expectResult(true) {
-      userDirectory.userExists(userId)
+      userDirectory.userExists(userId).get
     }
   }
 
   // Properties access
 
   test("Should load user properties.") {
-    val userId = userDirectory.createUser(Map("foo" -> "bar"))
+    val userId = userDirectory.createUser(Map("foo" -> "bar")).get
     expectResult(Map("foo" -> "bar")) {
-      userDirectory.loadUserProperties(userId)
+      userDirectory.loadUserProperties(userId).get
     }
   }
 
   test("Should load user property.") {
-    val userId = userDirectory.createUser(Map("foo" -> "bar"))
+    val userId = userDirectory.createUser(Map("foo" -> "bar")).get
     expectResult(Some("bar")) {
-      userDirectory.loadUserProperty(userId, "foo")
+      userDirectory.loadUserProperty(userId, "foo").get
     }
   }
 
   test("Should return None for non-existing user property.") {
-    val userId = userDirectory.createUser()
+    val userId = userDirectory.createUser().get
     expectResult(None) {
-      userDirectory.loadUserProperty(userId, "randomProperty")
+      userDirectory.loadUserProperty(userId, "randomProperty").get
     }
   }
 
   test("Should load user id by property.") {
-    val userId = userDirectory.createUser(Map("foo" -> "bar"))
+    val userId = userDirectory.createUser(Map("foo" -> "bar")).get
     expectResult(Some(userId)) {
       userDirectory.loadUserIdByProperty("foo", "bar").get
     }
@@ -80,18 +80,18 @@ class DefaultUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with 
 
   test("Should list users properties.") {
     val properties = Map("foo" -> "bar", "baz" -> "qux")
-    val user1Id = userDirectory.createUser(properties)
-    val user2Id = userDirectory.createUser(properties)
+    val user1Id = userDirectory.createUser(properties).get
+    val user2Id = userDirectory.createUser(properties).get
     expectResult(Seq(User(user1Id, Map("foo" -> "bar")), User(user2Id, Map("foo" -> "bar")))) {
-      userDirectory.listUsersProperties(Seq("foo"))
+      userDirectory.listUsersProperties(Seq("foo")).get
     }
   }
 
   test("Should update user properties.") {
-    val userId = userDirectory.createUser(Map("foo" -> "bar"))
+    val userId = userDirectory.createUser(Map("foo" -> "bar")).get
     expectResult(Map("baz" -> "qux", "foo" -> "bar")) {
-      userDirectory.updateUserProperties(userId, Map("baz" -> "qux"))
-      userDirectory.loadUserProperties(userId)
+      userDirectory.updateUserProperties(userId, Map("baz" -> "qux")).get
+      userDirectory.loadUserProperties(userId).get
     }
   }
 
