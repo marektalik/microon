@@ -1,0 +1,111 @@
+buildscript {
+    repositories {
+        maven { url 'http://repo.springsource.org/plugins-release' }
+    }
+
+    dependencies {
+        classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.1'
+    }
+}
+
+subprojects {
+    // Maven compatibility
+    apply plugin: 'maven'
+    group = 'com.github.microon'
+    version = '0.0-SNAPSHOT'
+
+    // Dependencies
+    apply plugin: 'propdeps'
+    apply plugin: 'propdeps-maven'
+    apply plugin: 'propdeps-idea'
+    apply plugin: 'propdeps-eclipse'
+
+    repositories {
+        mavenCentral()
+    }
+
+    // Releasing
+    apply plugin: 'signing'
+    ext.isReleaseVersion = !version.endsWith("-SNAPSHOT")
+
+    task scaladocJar(type: Jar, dependsOn: scaladoc) {
+        classifier = 'scaladoc'
+        from 'build/docs/scaladoc'
+    }
+
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allSource
+        classifier = 'sources'
+    }
+
+    artifacts {
+        archives jar
+        archives scaladocJar
+        archives sourcesJar
+    }
+
+    signing {
+        required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+        sign configurations.archives
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signPom(deployment) }
+
+                def snapshotRepo = 'https://oss.sonatype.org/content/repositories/snapshots/'
+                def releaseRepo = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                repository(url: isReleaseVersion ? releaseRepo : snapshotRepo) {
+                    authentication(userName: sonatypeUsername, password: sonatypePassword)
+                }
+
+                pom.project {
+                    name 'microon'
+                    packaging 'jar'
+                    url 'https://github.com/hekonsek/microon'
+                    description 'Micro Services framework'
+
+                    scm {
+                        url 'scm:git@github.com:hekonsek/microon.git'
+                        connection 'scm:git@github.com:hekonsek/microon.git'
+                        developerConnection 'scm:git@github.com:hekonsek/microon.git'
+                    }
+
+                    developers {
+                        developer {
+                            id 'hekonsek'
+                            name 'Henryk Konsek'
+                        }
+                    }
+
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+project("microon-ri") {
+
+    // JVM
+    apply plugin: 'scala'
+
+    // Dependencies
+    dependencies {
+        compile 'org.scala-lang:scala-library:2.10.1'
+        compile 'org.slf4j:slf4j-api:1.7.5'
+
+        testCompile 'junit:junit:4.11'
+        testCompile 'org.scalatest:scalatest_2.10:1.9.1'
+        testCompile 'org.mockito:mockito-core:1.9.5'
+        testCompile 'ch.qos.logback:logback-classic:1.0.13'
+    }
+
+}
