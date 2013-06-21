@@ -1,1 +1,1 @@
-include 'microon-ri'
+include 'microon-ri', 'microon-spi-scala'
