@@ -10,14 +10,15 @@ import org.springframework.data.mongodb.core.query.{Update, Query}
 import scala.collection.JavaConversions._
 import org.bson.types.ObjectId
 import microon.services.userdirectory.{UserDirectoryService, User}
+import DefaultUserDirectoryService.userCollectionName
 
 class DefaultUserDirectoryService(mongo: MongoTemplate) extends UserDirectoryService with ActiveObject {
 
   def userExists(id: String): Boolean =
-    mongo.count(id.toObjectIdQuery, DefaultUserDirectoryService.userCollectionName) > 0
+    mongo.count(id.toObjectIdQuery, userCollectionName) > 0
 
   def createUser(initialProperties: Map[String, String] = Map.empty): String = {
-    mongo.execute(DefaultUserDirectoryService.userCollectionName, new CollectionCallback[String] {
+    mongo.execute(userCollectionName, new CollectionCallback[String] {
       def doInCollection(collection: DBCollection): String = {
         val user = new BasicDBObject()
         initialProperties.map(kv => user.put(kv._1, kv._2))
@@ -28,18 +29,18 @@ class DefaultUserDirectoryService(mongo: MongoTemplate) extends UserDirectorySer
   }
 
   def loadUserProperties(id: String): Map[String, String] =
-    mongo.findOne(id.toObjectIdQuery, classOf[java.util.HashMap[String, String]], DefaultUserDirectoryService.userCollectionName).toMap - "_id"
+    mongo.findOne(id.toObjectIdQuery, classOf[java.util.HashMap[String, String]], userCollectionName).toMap - "_id"
 
   def loadUserProperty(id: String, property: String): Option[String] =
-    mongo.findOne(id.toObjectIdQuery, classOf[java.util.HashMap[String, String]], DefaultUserDirectoryService.userCollectionName).toMap.
+    mongo.findOne(id.toObjectIdQuery, classOf[java.util.HashMap[String, String]], userCollectionName).toMap.
       get(property)
 
   def loadUserIdByProperty(propertyName: String, propertyValue: String): Future[Option[String]] = dispatch {
-    mongo.findOne(new Query(where(propertyName).is(propertyValue)), classOf[java.util.HashMap[String, String]], DefaultUserDirectoryService.userCollectionName).toMap.get("_id")
+    mongo.findOne(new Query(where(propertyName).is(propertyValue)), classOf[java.util.HashMap[String, String]], userCollectionName).toMap.get("_id")
   }
 
   def listUsersProperties(properties: Seq[String]): Seq[User] = {
-    mongo.execute(DefaultUserDirectoryService.userCollectionName, new CollectionCallback[Seq[User]] {
+    mongo.execute(userCollectionName, new CollectionCallback[Seq[User]] {
       def doInCollection(collection: DBCollection): Seq[User] = {
         val users = for (user <- collection.find.iterator()) yield {
           val keys = user.keySet().toSet.intersect(properties.toSet)
@@ -52,7 +53,7 @@ class DefaultUserDirectoryService(mongo: MongoTemplate) extends UserDirectorySer
   }
 
   def updateUserProperties(id: String, properties: Map[String, String]) {
-    mongo.updateFirst(id.toObjectIdQuery, new Update().evaluate(up => properties.foreach(kv => up.set(kv._1, kv._2))), DefaultUserDirectoryService.userCollectionName)
+    mongo.updateFirst(id.toObjectIdQuery, new Update().evaluate(up => properties.foreach(kv => up.set(kv._1, kv._2))), userCollectionName)
   }
 
   // Helpers
