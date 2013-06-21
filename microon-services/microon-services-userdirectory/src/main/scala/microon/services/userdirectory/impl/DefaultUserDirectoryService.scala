@@ -1,12 +1,13 @@
 package microon.services.userdirectory.impl
 
-import java.util.concurrent.Future
 import com.mongodb.{DBCollection, BasicDBObject}
-import org.springframework.data.mongodb.core.{MongoTemplate, CollectionCallback}
-import scalapi.jdk.Implicits._
+import java.util.concurrent.Future
 import microon.spi.scala.activeobject.ActiveObject
+import org.springframework.data.mongodb.core.{MongoTemplate, CollectionCallback}
 import org.springframework.data.mongodb.core.query.Criteria.where
 import org.springframework.data.mongodb.core.query.{Update, Query}
+import scalapi.jdk.Implicits._
+
 import scala.collection.JavaConversions._
 import org.bson.types.ObjectId
 import microon.services.userdirectory.{UserDirectoryService, User}
