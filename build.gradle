@@ -14,11 +14,24 @@ subprojects {
     group = 'com.github.microon'
     version = '0.0-SNAPSHOT'
 
+    // JVM
+    apply plugin: 'scala'
+
     // Dependencies
     apply plugin: 'propdeps'
     apply plugin: 'propdeps-maven'
     apply plugin: 'propdeps-idea'
     apply plugin: 'propdeps-eclipse'
+
+    dependencies {
+        compile 'org.scala-lang:scala-library:2.10.1'
+        compile 'org.slf4j:slf4j-api:1.7.5'
+
+        testCompile 'junit:junit:4.11'
+        testCompile 'org.scalatest:scalatest_2.10:1.9.1'
+        testCompile 'org.mockito:mockito-core:1.9.5'
+        testCompile 'ch.qos.logback:logback-classic:1.0.13'
+    }
 
     repositories {
         mavenCentral()
@@ -88,24 +101,6 @@ subprojects {
                 }
             }
         }
-    }
-
-}
-
-project("microon-ri") {
-
-    // JVM
-    apply plugin: 'scala'
-
-    // Dependencies
-    dependencies {
-        compile 'org.scala-lang:scala-library:2.10.1'
-        compile 'org.slf4j:slf4j-api:1.7.5'
-
-        testCompile 'junit:junit:4.11'
-        testCompile 'org.scalatest:scalatest_2.10:1.9.1'
-        testCompile 'org.mockito:mockito-core:1.9.5'
-        testCompile 'ch.qos.logback:logback-classic:1.0.13'
     }
 
 }
