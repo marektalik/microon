@@ -3,7 +3,7 @@ package microon.services.userdirectory.impl
 import com.mongodb.{DBCollection, BasicDBObject}
 import java.util.concurrent.Future
 import microon.spi.scala.activeobject.ActiveObject
-import org.springframework.data.mongodb.core.{MongoTemplate, CollectionCallback}
+import org.springframework.data.mongodb.core.{MongoOperations, CollectionCallback}
 import org.springframework.data.mongodb.core.query.Criteria.where
 import org.springframework.data.mongodb.core.query.{Update, Query}
 import scalapi.jdk.Implicits._
@@ -13,7 +13,7 @@ import org.bson.types.ObjectId
 import microon.services.userdirectory.{UserDirectoryService, User}
 import DefaultUserDirectoryService.userCollectionName
 
-class DefaultUserDirectoryService(mongo: MongoTemplate) extends UserDirectoryService with ActiveObject {
+class DefaultUserDirectoryService(mongo: MongoOperations) extends UserDirectoryService with ActiveObject {
 
   def userExists(id: String): Future[Boolean] = dispatch {
     mongo.count(id.toObjectIdQuery, userCollectionName) > 0
