@@ -1,6 +1,5 @@
-package efsp.services.auth.googleoauth
+package microon.services.auth.googleoauth
 
-import efsp.services.auth.{AuthProvider, AuthRequest, UserRegistry}
 import java.net.URL
 import com.google.api.client.googleapis.auth.oauth2.{GoogleCredential, GoogleBrowserClientRequestUrl}
 import javax.servlet.http.HttpServletRequest
@@ -8,6 +7,7 @@ import com.google.api.services.oauth2.Oauth2
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import scala.collection.JavaConversions._
+import microon.services.auth.{AuthRequest, AuthProvider, UserRegistry}
 
 class GoogleOAuthProvider(userRegistry: UserRegistry, userIdResolver: UserIdResolver, userInfoValidator: UserInfoValidator, cliendId: String, redirectUrl: URL, profiles: Seq[String]) extends AuthProvider {
 

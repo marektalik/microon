@@ -1,6 +1,4 @@
-package efsp.services.auth
-
-import scala.Predef.String
+package microon.services.auth
 
 trait UserRegistry {
 
