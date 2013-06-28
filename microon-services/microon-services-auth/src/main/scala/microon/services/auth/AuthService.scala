@@ -1,9 +1,11 @@
 package microon.services.auth
 
-class AuthService(authProviders: Seq[AuthProvider]) {
+trait AuthService {
 
-  def auth(authRequest: AuthRequest) {
-    authProviders.filter(_.supports(authRequest)).last.auth(authRequest)
-  }
+  def auth(authRequest: AuthRequest)
+
+  def isLoggedIn(userId: String): Boolean
+
+  def lastLogInFailureMessage(userId: String): Option[String]
 
 }
