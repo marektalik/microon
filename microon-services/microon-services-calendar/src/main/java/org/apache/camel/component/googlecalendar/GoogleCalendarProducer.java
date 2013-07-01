@@ -1,6 +1,8 @@
 package org.apache.camel.component.googlecalendar;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.component.googlecalendar.commands.InsertEvent;
+import org.apache.camel.component.googlecalendar.commands.InsertEventHandler;
 import org.apache.camel.component.googlecalendar.commands.ListEvents;
 import org.apache.camel.component.googlecalendar.commands.ListEventsHandler;
 import org.apache.camel.impl.DefaultProducer;
@@ -30,6 +32,9 @@ public class GoogleCalendarProducer extends DefaultProducer {
         } else if (command instanceof ListEvents) {
             ListEvents listEventsCommand = (ListEvents) command;
             new ListEventsHandler().handle(this, listEventsCommand, exchange);
+        } else if (command instanceof InsertEvent) {
+            InsertEvent insertEventCommand = (InsertEvent) command;
+            new InsertEventHandler().handle(this, insertEventCommand, exchange);
         }
     }
 
