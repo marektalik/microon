@@ -10,4 +10,6 @@ trait UserRegistry {
 
   def lastLogInFailureMessage(userId: String): Option[String]
 
+  def logout(userId: String)
+
 }

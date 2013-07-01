@@ -107,6 +107,8 @@ subprojects {
 project('microon-ri') {
     dependencies {
         compile project(':microon-spi-scala')
+
+        optional 'org.springframework.scala:spring-scala:1.0.0.BUILD-SNAPSHOT'
     }
 }
 
@@ -120,6 +122,8 @@ project('microon-services') {
             optional 'com.google.http-client:google-http-client-jackson2:1.15.0-rc'
             optional 'com.google.apis:google-api-services-plus:v1-rev77-1.15.0-rc'
             optional 'com.google.apis:google-api-services-oauth2:v2-rev39-1.15.0-rc'
+
+            testCompile project(':microon-ri')
         }
     }
 

@@ -24,4 +24,8 @@ class InMemoryUserRegistry extends UserRegistry {
     lastLoginFailureMessage.get(userId)
   }
 
+  def logout(userId: String) {
+    loggedUsers -= userId
+  }
+
 }
