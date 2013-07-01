@@ -117,6 +117,8 @@ subprojects {
 project('microon-services') {
     project('microon-services-auth') {
         dependencies {
+            compile project(':microon-spi-scala')
+
             optional 'javax.servlet:servlet-api:3.0-alpha-1'
             optional 'com.google.api-client:google-api-client:1.15.0-rc'
             optional 'com.google.http-client:google-http-client-jackson2:1.15.0-rc'
