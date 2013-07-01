@@ -12,8 +12,8 @@ import com.mongodb.Mongo
 import org.springframework.scala.context.function.{ContextSupport, FunctionalConfiguration, FunctionalConfigApplicationContext}
 import java.util.concurrent.Executors._
 import scala.Some
-import microon.spi.scala.activeobject.ExecutorServiceActiveObjectDispatcher
 import microon.services.userdirectory.User
+import microon.ri.activeobject.ExecutorServiceActiveObjectDispatcher
 
 @RunWith(classOf[JUnitRunner])
 class DefaultUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {

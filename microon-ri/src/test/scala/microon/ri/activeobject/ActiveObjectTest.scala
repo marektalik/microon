@@ -1,4 +1,4 @@
-package microon.spi.scala.activeobject
+package microon.ri.activeobject
 
 import org.scalatest.{BeforeAndAfter, FunSuite}
 import org.junit.runner.RunWith
@@ -7,6 +7,7 @@ import java.util.concurrent.Executors.newCachedThreadPool
 import org.springframework.scala.context.function.{ContextSupport, FunctionalConfiguration, FunctionalConfigApplicationContext}
 import java.util.concurrent.Future
 import microon.spi.scala.activeobject
+import microon.spi.scala.activeobject.ActiveObject
 
 @RunWith(classOf[JUnitRunner])
 class ActiveObjectTest extends FunSuite with BeforeAndAfter {
