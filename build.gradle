@@ -23,6 +23,10 @@ subprojects {
     apply plugin: 'propdeps-idea'
     apply plugin: 'propdeps-eclipse'
 
+    ext {
+        camelVersion = '2.11.0'
+    }
+
     dependencies {
         compile 'org.scala-lang:scala-library:2.10.1'
         compile 'javax.inject:javax.inject:1'
@@ -121,9 +125,22 @@ project('microon-services') {
         }
     }
 
+    project('microon-services-calendar') {
+        dependencies {
+            compile project(':microon-spi-scala')
+
+            compile "org.apache.camel:camel-scala:$camelVersion"
+            compile 'com.google.apis:google-api-services-calendar:v3-rev47-1.15.0-rc'
+            compile 'com.google.http-client:google-http-client-jackson2:1.15.0-rc'
+
+            testCompile "org.apache.camel:camel-test:$camelVersion"
+        }
+    }
+
     project('microon-services-userdirectory') {
         dependencies {
             compile project(':microon-spi-scala')
+
             compile 'org.springframework.data:spring-data-mongodb:1.1.0.RELEASE'
             compile 'commons-logging:commons-logging:1.1.1'
 
