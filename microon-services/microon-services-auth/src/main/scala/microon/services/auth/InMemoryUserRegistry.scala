@@ -1,31 +1,30 @@
 package microon.services.auth
 
-import scala.collection.concurrent.TrieMap
 import java.util.Date
+import com.google.common.cache.CacheBuilder
+import java.util.concurrent.TimeUnit
 
 class InMemoryUserRegistry extends UserRegistry {
 
-  val loggedUsers = TrieMap.empty[String, Date]
-  val lastLoginFailureMessage = TrieMap.empty[String, String]
+  val loggedUsers = CacheBuilder.newBuilder.expireAfterAccess(1, TimeUnit.HOURS).build[String, Date]
+  val lastLoginFailureMessage = CacheBuilder.newBuilder.expireAfterAccess(1, TimeUnit.HOURS).build[String, String]
 
   def logIn(userId: String) {
-    loggedUsers += (userId -> new Date)
+    loggedUsers.put(userId, new Date)
   }
 
-  def isLoggedIn(userId: String): Boolean = {
-    loggedUsers.get(userId).isDefined
-  }
+  def isLoggedIn(userId: String): Boolean =
+    loggedUsers.getIfPresent(userId) != null
 
   def logFailureMessage(userId: String, message: String) {
-    lastLoginFailureMessage += (userId -> message)
+    lastLoginFailureMessage.put(userId, message)
   }
 
-  def lastLogInFailureMessage(userId: String): Option[String] = {
-    lastLoginFailureMessage.get(userId)
-  }
+  def lastLogInFailureMessage(userId: String): Option[String] =
+    Option(lastLoginFailureMessage.getIfPresent(userId))
 
   def logout(userId: String) {
-    loggedUsers -= userId
+    loggedUsers.invalidate(userId)
   }
 
 }

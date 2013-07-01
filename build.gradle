@@ -15,6 +15,7 @@ subprojects {
 
     ext {
         camelVersion = '2.11.0'
+        guavaDependency = 'com.google.guava:guava:14.0.1'
     }
 
     dependencies {
@@ -117,6 +118,7 @@ project('microon-services') {
         dependencies {
             compile project(':microon-spi-scala')
 
+            compile guavaDependency
             optional 'javax.servlet:servlet-api:3.0-alpha-1'
             optional 'com.google.api-client:google-api-client:1.15.0-rc'
             optional 'com.google.http-client:google-http-client-jackson2:1.15.0-rc'
@@ -149,7 +151,7 @@ project('microon-services') {
 
             testCompile project(':microon-ri')
             testCompile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.33'
-            testCompile 'com.google.guava:guava:14.0.1'
+            testCompile guavaDependency
         }
     }
 }
