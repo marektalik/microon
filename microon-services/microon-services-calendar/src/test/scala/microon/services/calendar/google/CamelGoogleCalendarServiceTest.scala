@@ -4,20 +4,19 @@ import org.apache.camel.CamelContext
 import org.apache.camel.component.googlecalendar.commands.{ListEvents => CamelListEvents}
 import java.util.Date
 import scala.collection.JavaConversions._
-import org.scalatest.{BeforeAndAfter, FunSuite}
+import org.scalatest.FunSuite
 import org.scalatest.mock.MockitoSugar
 import org.mockito.{Matchers, Mockito}
 import org.mockito.BDDMockito._
 import Matchers._
 import Matchers.{eq => eql}
-import org.springframework.scala.context.function.{FunctionalConfigApplicationContext, ContextSupport, FunctionalConfiguration}
-import java.util.concurrent.Executors._
+import org.springframework.scala.context.function.FunctionalConfiguration
 import microon.services.calendar.Event
 import org.apache.camel.component.googlecalendar.{Event => CamelEvent}
 import java.util.{List => JavaList}
-import microon.ri.activeobject.ExecutorServiceActiveObjectDispatcher
+import microon.ri.boot.spring.scala.SpringScalaBoot
 
-class CamelGoogleCalendarServiceTest extends FunSuite with BeforeAndAfter with MockitoSugar {
+class CamelGoogleCalendarServiceTest extends FunSuite with MockitoSugar {
 
   // Data fixtures
 
@@ -25,14 +24,9 @@ class CamelGoogleCalendarServiceTest extends FunSuite with BeforeAndAfter with M
 
   // Collaborators fixtures
 
-  var service: CamelGoogleCalendarService = _
-  var camelContext: CamelContext = _
-
-  before {
-    val context = FunctionalConfigApplicationContext[TestConfig]
-    camelContext = context.bean[CamelContext].get
-    service = context.bean[CamelGoogleCalendarService].get
-  }
+  val boot = SpringScalaBoot[TestConfig].start()
+  var service = boot.context[CamelGoogleCalendarService]
+  var camelContext = boot.context[CamelContext]
 
   // Tests
 
@@ -49,12 +43,14 @@ class CamelGoogleCalendarServiceTest extends FunSuite with BeforeAndAfter with M
 
 }
 
-class TestConfig extends FunctionalConfiguration with ContextSupport with MockitoSugar {
-  enableAnnotationConfig()
+class TestConfig extends FunctionalConfiguration with MockitoSugar {
 
-  val executor = bean()(newCachedThreadPool)
-  bean()(new ExecutorServiceActiveObjectDispatcher(executor()))
+  val camelContext = bean() {
+    mock[CamelContext](Mockito.RETURNS_DEEP_STUBS)
+  }
 
-  val camelContext = bean()(mock[CamelContext](Mockito.RETURNS_DEEP_STUBS))
-  bean()(new CamelGoogleCalendarService(camelContext(), "calendarId", "serviceId", "secretPath"))
+  bean() {
+    new CamelGoogleCalendarService(camelContext(), "calendarId", "serviceId", "secretPath")
+  }
+
 }
