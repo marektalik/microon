@@ -11,10 +11,11 @@ import microon.services.auth.{AuthRequest, AuthProvider, UserRegistry}
 
 class GoogleOAuthProvider(userRegistry: UserRegistry, userIdResolver: UserIdResolver, userInfoValidator: UserInfoValidator, cliendId: String, redirectUrl: URL, profiles: Seq[String]) extends AuthProvider {
 
-  def auth(authRequest: AuthRequest) {
-    val oauth = authRequest.asInstanceOf[GoogleOAuthAuthRequest]
-    val oauthUrl = new GoogleBrowserClientRequestUrl(cliendId, redirectUrl.toString, profiles).setState("/").build
-    oauth.httpResponse.sendRedirect(oauthUrl)
+  def authenticator: PartialFunction[AuthRequest, Unit] = {
+    case request: GoogleOAuthAuthRequest => {
+      val oauthUrl = new GoogleBrowserClientRequestUrl(cliendId, redirectUrl.toString, profiles).setState("/").build
+      request.httpResponse.sendRedirect(oauthUrl)
+    }
   }
 
   def handleResponse(httpRequest: HttpServletRequest): String = {
@@ -30,8 +31,5 @@ class GoogleOAuthProvider(userRegistry: UserRegistry, userIdResolver: UserIdReso
       userRegistry.logFailureMessage(userId, validation.get)
     userId
   }
-
-  def supports(authRequest: AuthRequest): Boolean =
-    authRequest.isInstanceOf[GoogleOAuthAuthRequest]
 
 }

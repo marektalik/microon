@@ -5,18 +5,16 @@ import TrueFalseAuthProvider.failureMessage
 
 class TrueFalseAuthProvider(userRegistry: UserRegistry) extends AuthProvider {
 
-  def auth(authRequest: AuthRequest) {
-    val trueFalseAuthRequest = authRequest.asInstanceOf[TrueFalseAuthRequest]
-    val userId = trueFalseAuthRequest.userId
-    if (trueFalseAuthRequest.expectedResult) {
-      userRegistry.logIn(userId)
-    } else {
-      userRegistry.logFailureMessage(userId, failureMessage(userId))
+  def authenticator: PartialFunction[AuthRequest, Unit] = {
+    case request: TrueFalseAuthRequest => {
+      val userId = request.userId
+      if (request.expectedResult) {
+        userRegistry.logIn(userId)
+      } else {
+        userRegistry.logFailureMessage(userId, failureMessage(userId))
+      }
     }
   }
-
-  def supports(authRequest: AuthRequest): Boolean =
-    authRequest.isInstanceOf[TrueFalseAuthRequest]
 
 }
 

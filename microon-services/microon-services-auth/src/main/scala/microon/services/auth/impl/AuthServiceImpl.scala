@@ -6,8 +6,11 @@ import microon.spi.scala.activeobject.{ActiveObject, Void}
 
 class AuthServiceImpl(userRegistry: UserRegistry, authProviders: Seq[AuthProvider]) extends AuthService with ActiveObject {
 
+  var authenticators = PartialFunction.empty[AuthRequest, Unit]
+  authProviders.foreach(provider => authenticators = authenticators orElse provider.authenticator)
+
   def auth(authRequest: AuthRequest): Future[Void] = void {
-    authProviders.filter(_.supports(authRequest)).last.auth(authRequest)
+    authenticators(authRequest)
   }
 
   def isLoggedIn(userId: String): Future[Boolean] = dispatch {
