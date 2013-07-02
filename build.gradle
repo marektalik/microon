@@ -15,7 +15,6 @@ subprojects {
 
     ext {
         camelVersion = '2.11.0'
-        embedMongoDependnecy = 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.33'
         guavaDependency = 'com.google.guava:guava:14.0.1'
     }
 
@@ -33,6 +32,7 @@ subprojects {
     }
 
     repositories {
+        mavenLocal()
         mavenCentral()
         maven { url 'http://repo.springsource.org/snapshot' }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
@@ -147,12 +147,11 @@ project('microon-services') {
         dependencies {
             compile project(':microon-spi-scala')
 
-            compile 'org.springframework.data:spring-data-mongodb:1.1.0.RELEASE'
+            compile 'org.springframework.data:spring-data-mongodb:1.2.1.RELEASE'
             compile 'commons-logging:commons-logging:1.1.1'
 
             testCompile project(':microon-ri')
-            testCompile embedMongoDependnecy
-            testCompile guavaDependency
+            testCompile 'com.github.scalapi:scalapi-embedmongo:0.2-SNAPSHOT'
         }
     }
 }

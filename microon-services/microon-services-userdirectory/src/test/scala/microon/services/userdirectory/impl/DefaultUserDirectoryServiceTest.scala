@@ -3,25 +3,17 @@ package microon.services.userdirectory.impl
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSuite}
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
-import de.flapdoodle.embed.mongo.config.MongodConfig
-import de.flapdoodle.embed.mongo.distribution.Version
-import de.flapdoodle.embed.process.runtime.Network
-import de.flapdoodle.embed.mongo.MongodStarter._
 import org.springframework.data.mongodb.core.MongoTemplate
-import com.mongodb.Mongo
+import com.mongodb.MongoClient
 import org.springframework.scala.context.function.{ContextSupport, FunctionalConfiguration}
 import scala.Some
 import microon.services.userdirectory.{UserDirectoryService, User}
 import microon.ri.boot.spring.scala.SpringScalaBoot
+import scalapi.embedmongo.EmbedMongoSupport
 
 @RunWith(classOf[JUnitRunner])
-class DefaultUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
-
-  // Infrastructure fixtures
-
-  val mongoConfig = new MongodConfig(Version.Main.PRODUCTION, 27017, Network.localhostIsIPv6())
-  val mongoDaemon = getDefaultInstance.prepare(mongoConfig).start()
-  val mongo = new Mongo
+class DefaultUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll
+with EmbedMongoSupport {
 
   // Services fixtures
 
@@ -29,7 +21,7 @@ class DefaultUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with 
   var service = boot.context[UserDirectoryService]
 
   override def afterAll(configMap: Map[String, Any]) {
-    mongoDaemon.stop()
+    stopMongo()
   }
 
   before {
@@ -105,7 +97,7 @@ class TestConfig extends FunctionalConfiguration with ContextSupport {
   enableAnnotationConfig()
 
   val mongoTemplate = bean() {
-    new MongoTemplate(new Mongo, DefaultUserDirectoryService.userDirectoryDBName)
+    new MongoTemplate(new MongoClient, DefaultUserDirectoryService.userDirectoryDBName)
   }
 
   bean()(new DefaultUserDirectoryService(mongoTemplate()))
