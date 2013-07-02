@@ -1,4 +1,4 @@
-package microon.services.userdirectory.impl
+package microon.services.userdirectory.mongo
 
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSuite}
 import org.scalatest.junit.JUnitRunner
@@ -12,7 +12,7 @@ import microon.ri.boot.spring.scala.SpringScalaBoot
 import scalapi.embedmongo.EmbedMongoSupport
 
 @RunWith(classOf[JUnitRunner])
-class DefaultUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll
+class MongoUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll
 with EmbedMongoSupport {
 
   // Services fixtures
@@ -25,7 +25,7 @@ with EmbedMongoSupport {
   }
 
   before {
-    mongo.dropDatabase(DefaultUserDirectoryService.userDirectoryDBName)
+    mongo.dropDatabase(MongoUserDirectoryService.userDirectoryDBName)
   }
 
   // User existence
@@ -97,9 +97,9 @@ class TestConfig extends FunctionalConfiguration with ContextSupport {
   enableAnnotationConfig()
 
   val mongoTemplate = bean() {
-    new MongoTemplate(new MongoClient, DefaultUserDirectoryService.userDirectoryDBName)
+    new MongoTemplate(new MongoClient, MongoUserDirectoryService.userDirectoryDBName)
   }
 
-  bean()(new DefaultUserDirectoryService(mongoTemplate()))
+  bean()(new MongoUserDirectoryService(mongoTemplate()))
 
 }

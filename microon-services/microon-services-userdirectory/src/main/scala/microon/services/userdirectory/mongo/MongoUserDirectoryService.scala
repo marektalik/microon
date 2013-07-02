@@ -1,4 +1,4 @@
-package microon.services.userdirectory.impl
+package microon.services.userdirectory.mongo
 
 import com.mongodb.{DBCollection, BasicDBObject}
 import java.util.concurrent.Future
@@ -11,9 +11,9 @@ import scalapi.jdk.Implicits._
 import scala.collection.JavaConversions._
 import org.bson.types.ObjectId
 import microon.services.userdirectory.{UserDirectoryService, User}
-import DefaultUserDirectoryService.userCollectionName
+import MongoUserDirectoryService.userCollectionName
 
-class DefaultUserDirectoryService(mongo: MongoOperations) extends UserDirectoryService with ActiveObject {
+class MongoUserDirectoryService(mongo: MongoOperations) extends UserDirectoryService with ActiveObject {
 
   def userExists(id: String): Future[Boolean] = dispatch {
     mongo.count(id.toObjectIdQuery, userCollectionName) > 0
@@ -68,7 +68,7 @@ class DefaultUserDirectoryService(mongo: MongoOperations) extends UserDirectoryS
 
 }
 
-object DefaultUserDirectoryService {
+object MongoUserDirectoryService {
   val userDirectoryDBName = "microon_services_userdirectory"
   val userCollectionName = "users"
 }
