@@ -15,6 +15,7 @@ subprojects {
 
     ext {
         camelVersion = '2.11.0'
+        embedMongoDependnecy = 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.33'
         guavaDependency = 'com.google.guava:guava:14.0.1'
     }
 
@@ -150,7 +151,7 @@ project('microon-services') {
             compile 'commons-logging:commons-logging:1.1.1'
 
             testCompile project(':microon-ri')
-            testCompile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.33'
+            testCompile embedMongoDependnecy
             testCompile guavaDependency
         }
     }

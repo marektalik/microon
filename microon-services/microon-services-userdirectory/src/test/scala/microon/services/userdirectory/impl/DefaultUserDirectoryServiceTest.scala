@@ -9,11 +9,10 @@ import de.flapdoodle.embed.process.runtime.Network
 import de.flapdoodle.embed.mongo.MongodStarter._
 import org.springframework.data.mongodb.core.MongoTemplate
 import com.mongodb.Mongo
-import org.springframework.scala.context.function.{ContextSupport, FunctionalConfiguration, FunctionalConfigApplicationContext}
-import java.util.concurrent.Executors._
+import org.springframework.scala.context.function.{ContextSupport, FunctionalConfiguration}
 import scala.Some
-import microon.services.userdirectory.User
-import microon.ri.activeobject.ExecutorServiceActiveObjectDispatcher
+import microon.services.userdirectory.{UserDirectoryService, User}
+import microon.ri.boot.spring.scala.SpringScalaBoot
 
 @RunWith(classOf[JUnitRunner])
 class DefaultUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
@@ -22,7 +21,8 @@ class DefaultUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with 
   val mongoDaemon = getDefaultInstance.prepare(mongoConfig).start()
   val mongo = new Mongo
 
-  var userDirectory: DefaultUserDirectoryService = _
+  val boot = SpringScalaBoot[TestConfig].start()
+  var userDirectory = boot.context[UserDirectoryService]
 
   override def afterAll(configMap: Map[String, Any]) {
     mongoDaemon.stop()
@@ -30,8 +30,6 @@ class DefaultUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with 
 
   before {
     mongo.dropDatabase(DefaultUserDirectoryService.userDirectoryDBName)
-    val context = FunctionalConfigApplicationContext[TestConfig]
-    userDirectory = context.bean[DefaultUserDirectoryService].get
   }
 
   test("Should not find non-existing user.") {
@@ -100,11 +98,10 @@ class DefaultUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with 
 class TestConfig extends FunctionalConfiguration with ContextSupport {
   enableAnnotationConfig()
 
-  val executor = bean()(newCachedThreadPool)
-  bean()(new ExecutorServiceActiveObjectDispatcher(executor()))
-
   val mongoTemplate = bean() {
     new MongoTemplate(new Mongo, DefaultUserDirectoryService.userDirectoryDBName)
   }
+
   bean()(new DefaultUserDirectoryService(mongoTemplate()))
+
 }
