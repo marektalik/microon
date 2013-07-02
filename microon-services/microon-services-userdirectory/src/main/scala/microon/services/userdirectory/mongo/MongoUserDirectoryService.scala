@@ -2,16 +2,16 @@ package microon.services.userdirectory.mongo
 
 import com.mongodb.{DBCollection, BasicDBObject}
 import java.util.concurrent.Future
+import microon.services.userdirectory.{UserDirectoryService, User}
 import microon.spi.scala.activeobject.ActiveObject
+import MongoUserDirectoryService.userCollectionName
 import org.springframework.data.mongodb.core.{MongoOperations, CollectionCallback}
+import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.query.Criteria.where
 import org.springframework.data.mongodb.core.query.{Update, Query}
+import scala.collection.JavaConversions._
 import scalapi.jdk.Implicits._
 
-import scala.collection.JavaConversions._
-import org.bson.types.ObjectId
-import microon.services.userdirectory.{UserDirectoryService, User}
-import MongoUserDirectoryService.userCollectionName
 
 class MongoUserDirectoryService(mongo: MongoOperations) extends UserDirectoryService with ActiveObject {
 
@@ -46,7 +46,7 @@ class MongoUserDirectoryService(mongo: MongoOperations) extends UserDirectorySer
   def listUsersProperties(properties: Seq[String]): Future[Seq[User]] = dispatch {
     mongo.execute(userCollectionName, new CollectionCallback[Seq[User]] {
       def doInCollection(collection: DBCollection): Seq[User] = {
-        val users = for (user <- collection.find.iterator()) yield {
+        val users = for (user <- collection.find.iterator) yield {
           val keys = user.keySet().toSet.intersect(properties.toSet)
           val props = keys.foldLeft(Map.empty[String, String])((props, key) => props + (key -> user.get(key).toString))
           User(user.get("_id").toString, props)
