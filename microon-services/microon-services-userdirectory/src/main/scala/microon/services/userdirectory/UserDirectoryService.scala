@@ -7,15 +7,15 @@ trait UserDirectoryService {
 
   // User existence
 
-  def userExists(id: String): Future[Boolean]
+  def userExists(userId: String): Future[Boolean]
 
   def createUser(initialProperties: Map[String, String] = Map.empty): Future[String]
 
   // Properties access
 
-  def loadUserProperties(id: String): Future[Map[String, String]]
+  def loadUserProperties(userId: String): Future[Map[String, String]]
 
-  def loadUserProperty(id: String, property: String): Future[Option[String]]
+  def loadUserProperty(userId: String, property: String): Future[Option[String]]
 
   def loadUserIdByProperty(propertyName: String, propertyValue: String): Future[Option[String]]
 
@@ -23,7 +23,7 @@ trait UserDirectoryService {
 
   // Properties modification
 
-  def updateUserProperties(id: String, properties: Map[String, String]): Future[Void]
+  def updateUserProperties(userId: String, properties: Map[String, String]): Future[Void]
 
 }
 
