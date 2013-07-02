@@ -13,6 +13,13 @@ trait ActiveObject {
    */
   @Inject private[activeobject] var activeObjectDispatcher: ActiveObjectDispatcher = _
 
+  /**
+   * Method called by Active Object service in order to dispatch the result of the executed operation.
+   *
+   * @param returnValue return value of the executed operation to be dispatched
+   * @tparam T type of operation result
+   * @return result of the executed operation wrapped into [[java.util.concurrent.Future]]
+   */
   protected def dispatch[T](returnValue: => T): Future[T] =
     activeObjectDispatcher.dispatch(returnValue)
 
