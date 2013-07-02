@@ -17,12 +17,16 @@ import microon.ri.boot.spring.scala.SpringScalaBoot
 @RunWith(classOf[JUnitRunner])
 class DefaultUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
 
+  // Infrastructure fixtures
+
   val mongoConfig = new MongodConfig(Version.Main.PRODUCTION, 27017, Network.localhostIsIPv6())
   val mongoDaemon = getDefaultInstance.prepare(mongoConfig).start()
   val mongo = new Mongo
 
+  // Services fixtures
+
   val boot = SpringScalaBoot[TestConfig].start()
-  var userDirectory = boot.context[UserDirectoryService]
+  var service = boot.context[UserDirectoryService]
 
   override def afterAll(configMap: Map[String, Any]) {
     mongoDaemon.stop()
@@ -32,64 +36,66 @@ class DefaultUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with 
     mongo.dropDatabase(DefaultUserDirectoryService.userDirectoryDBName)
   }
 
+  // User existence
+
   test("Should not find non-existing user.") {
     expectResult(false) {
       val randomUserId = "123456789012345678901234"
-      userDirectory.userExists(randomUserId).get
+      service.userExists(randomUserId).get
     }
   }
 
   test("Should find existing user.") {
-    val userId = userDirectory.createUser().get
+    val userId = service.createUser().get
     expectResult(true) {
-      userDirectory.userExists(userId).get
+      service.userExists(userId).get
     }
   }
 
   // Properties access
 
   test("Should load user properties.") {
-    val userId = userDirectory.createUser(Map("foo" -> "bar")).get
+    val userId = service.createUser(Map("foo" -> "bar")).get
     expectResult(Map("foo" -> "bar")) {
-      userDirectory.loadUserProperties(userId).get
+      service.loadUserProperties(userId).get
     }
   }
 
   test("Should load user property.") {
-    val userId = userDirectory.createUser(Map("foo" -> "bar")).get
+    val userId = service.createUser(Map("foo" -> "bar")).get
     expectResult(Some("bar")) {
-      userDirectory.loadUserProperty(userId, "foo").get
+      service.loadUserProperty(userId, "foo").get
     }
   }
 
   test("Should return None for non-existing user property.") {
-    val userId = userDirectory.createUser().get
+    val userId = service.createUser().get
     expectResult(None) {
-      userDirectory.loadUserProperty(userId, "randomProperty").get
+      service.loadUserProperty(userId, "randomProperty").get
     }
   }
 
   test("Should load user id by property.") {
-    val userId = userDirectory.createUser(Map("foo" -> "bar")).get
+    val userId = service.createUser(Map("foo" -> "bar")).get
     expectResult(Some(userId)) {
-      userDirectory.loadUserIdByProperty("foo", "bar").get
+      service.loadUserIdByProperty("foo", "bar").get
     }
   }
 
   test("Should list users properties.") {
     val properties = Map("foo" -> "bar", "baz" -> "qux")
-    val user1Id = userDirectory.createUser(properties).get
-    val user2Id = userDirectory.createUser(properties).get
+    val user1Id = service.createUser(properties).get
+    val user2Id = service.createUser(properties).get
     expectResult(Seq(User(user1Id, Map("foo" -> "bar")), User(user2Id, Map("foo" -> "bar")))) {
-      userDirectory.listUsersProperties(Seq("foo")).get
+      service.listUsersProperties(Seq("foo")).get
     }
   }
 
   test("Should update user properties.") {
-    val userId = userDirectory.createUser(Map("foo" -> "bar")).get
+    val userId = service.createUser(Map("foo" -> "bar")).get
     expectResult(Map("baz" -> "qux", "foo" -> "bar")) {
-      userDirectory.updateUserProperties(userId, Map("baz" -> "qux")).get
-      userDirectory.loadUserProperties(userId).get
+      service.updateUserProperties(userId, Map("baz" -> "qux")).get
+      service.loadUserProperties(userId).get
     }
   }
 
