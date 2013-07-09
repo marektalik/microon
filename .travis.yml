@@ -1,2 +1,2 @@
 language: java
-script: check -i
+script: gradle check -i
