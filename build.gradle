@@ -16,10 +16,12 @@ subprojects {
     ext {
         camelVersion = '2.11.0'
         guavaDependency = 'com.google.guava:guava:14.0.1'
+        scalaVersion = '2.10.2'
     }
 
     dependencies {
-        compile 'org.scala-lang:scala-library:2.10.1'
+        compile "org.scala-lang:scala-library:$scalaVersion"
+        compile "org.scala-lang:scala-reflect:$scalaVersion"
         compile 'javax.inject:javax.inject:1'
         compile 'org.slf4j:slf4j-api:1.7.5'
         compile 'com.github.scalapi:scalapi-jdk:0.2-SNAPSHOT'
@@ -115,42 +117,48 @@ project('microon-ri') {
 }
 
 project('microon-services') {
-    project('microon-services-auth') {
+    subprojects {
         dependencies {
             compile project(':microon-spi-scala')
 
+            testCompile project(':microon-ri')
+        }
+    }
+
+    project('microon-services-auth') {
+        dependencies {
             compile guavaDependency
             optional 'javax.servlet:servlet-api:3.0-alpha-1'
             optional 'com.google.api-client:google-api-client:1.15.0-rc'
             optional 'com.google.http-client:google-http-client-jackson2:1.15.0-rc'
             optional 'com.google.apis:google-api-services-plus:v1-rev77-1.15.0-rc'
             optional 'com.google.apis:google-api-services-oauth2:v2-rev39-1.15.0-rc'
-
-            testCompile project(':microon-ri')
         }
     }
 
     project('microon-services-calendar') {
         dependencies {
-            compile project(':microon-spi-scala')
-
             compile "org.apache.camel:camel-scala:$camelVersion"
             compile 'com.google.apis:google-api-services-calendar:v3-rev47-1.15.0-rc'
             compile 'com.google.http-client:google-http-client-jackson2:1.15.0-rc'
 
-            testCompile project(':microon-ri')
             testCompile "org.apache.camel:camel-test:$camelVersion"
         }
     }
 
     project('microon-services-userdirectory') {
         dependencies {
-            compile project(':microon-spi-scala')
-
             compile 'org.springframework.data:spring-data-mongodb:1.2.1.RELEASE'
             compile 'commons-logging:commons-logging:1.1.1'
 
-            testCompile project(':microon-ri')
+            testCompile 'com.github.scalapi:scalapi-embedmongo:0.2-SNAPSHOT'
+        }
+    }
+
+    project('microon-services-usermanagement') {
+        dependencies {
+            compile project(':microon-services:microon-services-userdirectory')
+
             testCompile 'com.github.scalapi:scalapi-embedmongo:0.2-SNAPSHOT'
         }
     }

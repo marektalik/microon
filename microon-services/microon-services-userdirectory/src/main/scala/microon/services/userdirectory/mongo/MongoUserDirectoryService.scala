@@ -40,7 +40,10 @@ class MongoUserDirectoryService(mongo: MongoOperations) extends UserDirectorySer
   }
 
   def loadUserIdByProperty(propertyName: String, propertyValue: String): Future[Option[String]] = dispatch {
-    mongo.findOne(new Query(where(propertyName).is(propertyValue)), classOf[java.util.HashMap[String, String]], userCollectionName).toMap.get("_id")
+    Option(mongo.findOne(new Query(where(propertyName).is(propertyValue)), classOf[java.util.HashMap[String, String]], userCollectionName)) match {
+      case Some(properties) => properties.toMap.get("_id")
+      case None => None
+    }
   }
 
   def listUsersProperties(properties: Seq[String]): Future[Seq[User]] = dispatch {

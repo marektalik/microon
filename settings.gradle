@@ -2,4 +2,5 @@ include 'microon-spi-scala', 'microon-ri',
         'microon-services',
         'microon-services:microon-services-auth',
         'microon-services:microon-services-calendar',
-        'microon-services:microon-services-userdirectory'
+        'microon-services:microon-services-userdirectory',
+        'microon-services:microon-services-usermanagement'
