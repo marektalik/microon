@@ -4,28 +4,27 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSuite}
 import microon.ri.boot.spring.scala.SpringScalaBoot
 import org.springframework.scala.context.function.{ContextSupport, FunctionalConfiguration}
 import org.springframework.data.mongodb.core.MongoTemplate
-import com.mongodb.MongoClient
 import microon.services.userdirectory.mongo.MongoUserDirectoryService
 import microon.services.usermanagement.{User, UserManagementService}
-import scalapi.embedmongo.EmbedMongoSupport
+import scalapi.embedmongo.EmbedMongoServer
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 
 @RunWith(classOf[JUnitRunner])
-class DefaultUserManagementServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll
-with EmbedMongoSupport {
+class DefaultUserManagementServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
 
   // Services fixtures
 
   val boot = SpringScalaBoot[TestConfig].start()
+  val mongoServer = boot.context[EmbedMongoServer]
   var service = boot.context[UserManagementService]
 
   override def afterAll(configMap: Map[String, Any]) {
-    stopMongo()
+    mongoServer.stop()
   }
 
   before {
-    mongo.dropDatabase(MongoUserDirectoryService.userDirectoryDBName)
+    mongoServer.client.dropDatabase(MongoUserDirectoryService.userDirectoryDBName)
   }
 
   // Data fixtures
@@ -57,8 +56,12 @@ with EmbedMongoSupport {
 class TestConfig extends FunctionalConfiguration with ContextSupport {
   enableAnnotationConfig()
 
+  val mongoServer = bean() {
+    new EmbedMongoServer
+  }
+
   val mongoTemplate = bean() {
-    new MongoTemplate(new MongoClient, MongoUserDirectoryService.userDirectoryDBName)
+    new MongoTemplate(mongoServer().client, MongoUserDirectoryService.userDirectoryDBName)
   }
 
   val directoryService = bean()(new MongoUserDirectoryService(mongoTemplate()))

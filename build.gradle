@@ -17,6 +17,9 @@ subprojects {
         camelVersion = '2.11.0'
         guavaDependency = 'com.google.guava:guava:14.0.1'
         scalaVersion = '2.10.2'
+        scalapiVersion = '0.3-SNAPSHOT'
+        scalapiEmbedmongoDependnecy = "com.github.scalapi:scalapi-embedmongo:$scalapiVersion"
+        scalapiJdkDependnecy = "com.github.scalapi:scalapi-jdk:$scalapiVersion"
     }
 
     dependencies {
@@ -24,7 +27,9 @@ subprojects {
         compile "org.scala-lang:scala-reflect:$scalaVersion"
         compile 'javax.inject:javax.inject:1'
         compile 'org.slf4j:slf4j-api:1.7.5'
-        compile 'com.github.scalapi:scalapi-jdk:0.2-SNAPSHOT'
+        compile(scalapiJdkDependnecy) {
+            changing = true
+        }
 
         testCompile 'junit:junit:4.11'
         testCompile 'org.scalatest:scalatest_2.10:1.9.1'
@@ -151,7 +156,7 @@ project('microon-services') {
             compile 'org.springframework.data:spring-data-mongodb:1.2.1.RELEASE'
             compile 'commons-logging:commons-logging:1.1.1'
 
-            testCompile 'com.github.scalapi:scalapi-embedmongo:0.2-SNAPSHOT'
+            testCompile scalapiEmbedmongoDependnecy
         }
     }
 
@@ -159,7 +164,7 @@ project('microon-services') {
         dependencies {
             compile project(':microon-services:microon-services-userdirectory')
 
-            testCompile 'com.github.scalapi:scalapi-embedmongo:0.2-SNAPSHOT'
+            testCompile scalapiEmbedmongoDependnecy
         }
     }
 }

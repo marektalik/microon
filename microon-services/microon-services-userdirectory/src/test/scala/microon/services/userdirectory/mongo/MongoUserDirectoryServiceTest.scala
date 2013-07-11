@@ -4,28 +4,27 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSuite}
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import org.springframework.data.mongodb.core.MongoTemplate
-import com.mongodb.MongoClient
 import org.springframework.scala.context.function.{ContextSupport, FunctionalConfiguration}
 import scala.Some
 import microon.services.userdirectory.{UserDirectoryService, User}
 import microon.ri.boot.spring.scala.SpringScalaBoot
-import scalapi.embedmongo.EmbedMongoSupport
+import scalapi.embedmongo.EmbedMongoServer
 
 @RunWith(classOf[JUnitRunner])
-class MongoUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll
-with EmbedMongoSupport {
+class MongoUserDirectoryServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
 
   // Services fixtures
 
   val boot = SpringScalaBoot[TestConfig].start()
+  val mongoServer = boot.context[EmbedMongoServer]
   var service = boot.context[UserDirectoryService]
 
   override def afterAll(configMap: Map[String, Any]) {
-    stopMongo()
+    mongoServer.stop()
   }
 
   before {
-    mongo.dropDatabase(MongoUserDirectoryService.userDirectoryDBName)
+    mongoServer.client.dropDatabase(MongoUserDirectoryService.userDirectoryDBName)
   }
 
   // User existence
@@ -96,8 +95,12 @@ with EmbedMongoSupport {
 class TestConfig extends FunctionalConfiguration with ContextSupport {
   enableAnnotationConfig()
 
+  val mongoServer = bean() {
+    new EmbedMongoServer
+  }
+
   val mongoTemplate = bean() {
-    new MongoTemplate(new MongoClient, MongoUserDirectoryService.userDirectoryDBName)
+    new MongoTemplate(mongoServer().client, MongoUserDirectoryService.userDirectoryDBName)
   }
 
   bean()(new MongoUserDirectoryService(mongoTemplate()))
