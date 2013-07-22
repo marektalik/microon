@@ -151,6 +151,12 @@ project('microon-services') {
         }
     }
 
+    project('microon-services-repository') {
+        dependencies {
+            compile 'org.springframework.data:spring-data-commons:1.5.2.RELEASE'
+        }
+    }
+
     project('microon-services-userdirectory') {
         dependencies {
             compile 'org.springframework.data:spring-data-mongodb:1.2.1.RELEASE'
