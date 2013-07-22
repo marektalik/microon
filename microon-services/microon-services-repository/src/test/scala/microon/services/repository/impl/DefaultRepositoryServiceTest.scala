@@ -6,6 +6,7 @@ import microon.ri.boot.spring.scala.SpringScalaBoot
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.mockito.Mockito._
 import microon.services.repository.api.scala.RepositoryService
+import scala.collection.JavaConversions._
 
 class DefaultRepositoryServiceTest extends FunSuite with BeforeAndAfter {
 
@@ -28,7 +29,8 @@ class DefaultRepositoryServiceTest extends FunSuite with BeforeAndAfter {
   test("Should save entities.") {
     val entities = Seq(foo, foo)
     service.save(entities).get
-    verify(repository).save(entities.toList)
+    val entitiesIterator: java.lang.Iterable[Foo] = entities.toList
+    verify(repository).save(entitiesIterator)
   }
 
   test("Should find entity.") {
