@@ -7,8 +7,10 @@ import microon.spi.scala.activeobject.{Void, ActiveObject}
 import org.springframework.data.domain.{Sort, Page, Pageable}
 import java.util.concurrent.Future
 import java.lang.{Boolean, Long, Iterable}
+import scala.collection.JavaConversions._
 
-class DefaultJavaRepositoryService[T, ID <: Serializable](repository: PagingAndSortingRepository[T, ID])
+class DefaultJavaRepositoryService[T, ID <: Serializable]
+(repository: PagingAndSortingRepository[T, ID], queryHandler: QueryHandler[T])
   extends RepositoryService[T, ID]
   with ActiveObject {
 
@@ -62,6 +64,26 @@ class DefaultJavaRepositoryService[T, ID <: Serializable](repository: PagingAndS
 
   def findAll(pageable: Pageable): Future[Page[T]] = dispatch {
     repository.findAll(pageable)
+  }
+
+  def countByQuery(query: Any): Future[Long] = dispatch {
+    queryHandler.countByQuery(query)
+  }
+
+  def findAllByQuery(query: Any): Future[Iterable[T]] = dispatch {
+    queryHandler.findAllByQuery(query)
+  }
+
+  def findAllByQuery(query: Any, pageable: Pageable): Future[Page[T]] = dispatch {
+    queryHandler.findAllByQuery(query, pageable)
+  }
+
+  def findAllByQuery(query: Any, sort: Sort): Future[Iterable[T]] = dispatch {
+    queryHandler.findAllByQuery(query, sort)
+  }
+
+  def findOneByQuery(query: Any): Future[T] = dispatch {
+    queryHandler.findOneByQuery(query)
   }
 
 }

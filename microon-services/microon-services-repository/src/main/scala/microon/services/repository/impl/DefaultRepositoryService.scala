@@ -8,7 +8,8 @@ import org.springframework.data.repository.PagingAndSortingRepository
 import java.io.Serializable
 import scala.collection.JavaConversions._
 
-class DefaultRepositoryService[T, ID <: Serializable](repository: PagingAndSortingRepository[T, ID])
+class DefaultRepositoryService[T, ID <: Serializable]
+(repository: PagingAndSortingRepository[T, ID], queryHandler: QueryHandler[T])
   extends RepositoryService[T, ID]
   with ActiveObject {
 
@@ -62,6 +63,26 @@ class DefaultRepositoryService[T, ID <: Serializable](repository: PagingAndSorti
 
   def findAll(pageable: Pageable): Future[Page[T]] = dispatch {
     repository.findAll(pageable)
+  }
+
+  def countByQuery(query: Any): Future[Long] = dispatch {
+    queryHandler.countByQuery(query)
+  }
+
+  def findAllByQuery(query: Any): Future[Seq[T]] = dispatch {
+    queryHandler.findAllByQuery(query)
+  }
+
+  def findAllByQuery(query: Any, pageable: Pageable): Future[Page[T]] = dispatch {
+    queryHandler.findAllByQuery(query, pageable)
+  }
+
+  def findAllByQuery(query: Any, sort: Sort): Future[Seq[T]] = dispatch {
+    queryHandler.findAllByQuery(query, sort)
+  }
+
+  def findOneByQuery(query: Any): Future[T] = dispatch {
+    queryHandler.findOneByQuery(query)
   }
 
 }

@@ -36,4 +36,14 @@ public interface RepositoryService<T, ID extends Serializable> {
 
     Future<Page<T>> findAll(Pageable pageable);
 
+    Future<Long> countByQuery(Object query);
+
+    Future<Iterable<T>> findAllByQuery(Object query);
+
+    Future<Page<T>> findAllByQuery(Object query, Pageable pageable);
+
+    Future<Iterable<T>> findAllByQuery(Object query, Sort sort);
+
+    Future<T> findOneByQuery(Object query);
+
 }

@@ -33,4 +33,14 @@ trait RepositoryService[T, ID <: Serializable] {
 
   def findAll(pageable: Pageable): Future[Page[T]]
 
+  def countByQuery(query: Any): Future[Long]
+
+  def findAllByQuery(query: Any): Future[Seq[T]]
+
+  def findAllByQuery(query: Any, pageable: Pageable): Future[Page[T]]
+
+  def findAllByQuery(query: Any, sort: Sort): Future[Seq[T]]
+
+  def findOneByQuery(query: Any): Future[T]
+
 }

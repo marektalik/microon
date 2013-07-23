@@ -53,7 +53,7 @@ class TestConfig extends FunctionalConfiguration with ContextSupport {
   }
 
   bean() {
-    new DefaultRepositoryService(repository())
+    new DefaultRepositoryService(repository(), null)
   }
 
 }
