@@ -1,4 +1,4 @@
-package microon.services.auth.googleoauth
+package microon.services.auth.provider.googleoauth
 
 import java.net.URL
 import com.google.api.client.googleapis.auth.oauth2.{GoogleCredential, GoogleBrowserClientRequestUrl}
@@ -7,7 +7,8 @@ import com.google.api.services.oauth2.Oauth2
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import scala.collection.JavaConversions._
-import microon.services.auth.{AuthRequest, AuthProvider, UserRegistry}
+import microon.services.auth.impl.{UserRegistry, AuthProvider}
+import microon.services.auth.api.java.AuthRequest
 
 class GoogleOAuthProvider(userRegistry: UserRegistry, userIdResolver: UserIdResolver, userInfoValidator: UserInfoValidator, cliendId: String, redirectUrl: URL, profiles: Seq[String]) extends AuthProvider {
 

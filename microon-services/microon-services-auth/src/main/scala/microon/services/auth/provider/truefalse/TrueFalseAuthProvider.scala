@@ -1,7 +1,8 @@
-package microon.services.auth.truefalse
+package microon.services.auth.provider.truefalse
 
-import microon.services.auth.{UserRegistry, AuthRequest, AuthProvider}
 import TrueFalseAuthProvider.failureMessage
+import microon.services.auth.impl.{UserRegistry, AuthProvider}
+import microon.services.auth.api.java.AuthRequest
 
 class TrueFalseAuthProvider(userRegistry: UserRegistry) extends AuthProvider {
 

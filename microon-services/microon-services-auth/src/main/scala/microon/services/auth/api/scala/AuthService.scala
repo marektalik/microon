@@ -1,4 +1,4 @@
-package microon.services.auth
+package microon.services.auth.api.scala
 
 import java.util.concurrent.Future
 import microon.spi.scala.activeobject.Void

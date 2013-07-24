@@ -1,10 +1,11 @@
 package microon.services.auth.impl
 
-import microon.services.auth._
 import java.util.concurrent.Future
 import microon.spi.scala.activeobject.{ActiveObject, Void}
+import microon.services.auth.api.scala.{AuthRequest, AuthService}
 
-class AuthServiceImpl(userRegistry: UserRegistry, authProviders: Seq[AuthProvider]) extends AuthService with ActiveObject {
+class DefaultAuthService(userRegistry: UserRegistry, authProviders: Seq[AuthProvider])
+  extends AuthService with ActiveObject {
 
   var authenticators = PartialFunction.empty[AuthRequest, Unit]
   authProviders.foreach(provider => authenticators = authenticators orElse provider.authenticator)

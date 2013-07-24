@@ -1,4 +1,4 @@
-package microon.services.auth
+package microon.services.auth.impl
 
 trait UserRegistry {
 

@@ -1,4 +1,4 @@
-package microon.services.auth
+package microon.services.auth.impl
 
 import java.util.Date
 import com.google.common.cache.CacheBuilder

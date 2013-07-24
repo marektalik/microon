@@ -1,22 +1,22 @@
-package microon.services.auth
+package microon.services.auth.impl
 
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.{BeforeAndAfter, FunSuite}
-import microon.services.auth.truefalse.{TrueFalseAuthRequest, TrueFalseAuthProvider}
-import microon.services.auth.impl.AuthServiceImpl
+import microon.services.auth.provider.truefalse.{TrueFalseAuthRequest, TrueFalseAuthProvider}
 import TrueFalseAuthProvider.failureMessage
 import microon.ri.boot.spring.scala.SpringScalaBoot
 import org.springframework.scala.context.function.FunctionalConfiguration
+import microon.services.auth.api.scala.AuthService
 
 @RunWith(classOf[JUnitRunner])
-class AuthServiceImplTest extends FunSuite with BeforeAndAfter {
+class DefaultAuthServiceTest extends FunSuite with BeforeAndAfter {
 
   // Data fixtures
 
   val userId = "userId"
 
-  // Collaborators fixture
+  // Service fixtures
 
   var service: AuthService = _
 
@@ -55,7 +55,7 @@ class TestConfig extends FunctionalConfiguration {
   bean() {
     val userRegistry = new InMemoryUserRegistry
     val provider = new TrueFalseAuthProvider(userRegistry)
-    new AuthServiceImpl(userRegistry, Seq(provider))
+    new DefaultAuthService(userRegistry, Seq(provider))
   }
 
 }
