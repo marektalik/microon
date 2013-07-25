@@ -50,7 +50,7 @@ subprojects {
     ext.isReleaseVersion = !version.endsWith("-SNAPSHOT")
 
     task scaladocJar(type: Jar, dependsOn: scaladoc) {
-        classifier = 'scaladoc'
+        classifier = 'javadoc'
         from 'build/docs/scaladoc'
     }
 
