@@ -2,7 +2,7 @@ subprojects {
     // Maven compatibility
     apply plugin: 'maven'
     group = 'com.github.microon'
-    version = '0.0-SNAPSHOT'
+    version = '0.1-SNAPSHOT'
 
     // JVM
     apply plugin: 'scala'
