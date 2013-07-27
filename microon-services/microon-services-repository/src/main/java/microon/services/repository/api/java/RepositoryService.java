@@ -12,7 +12,7 @@ public interface RepositoryService<T, ID extends Serializable> {
 
     <S extends T> Future<S> save(S entity);
 
-    <S extends T> Future<Iterable<S>> save(Iterable<S> entities);
+    <S extends T> Future<Iterable<S>> saveMany(Iterable<S> entities);
 
     Future<T> findOne(ID id);
 

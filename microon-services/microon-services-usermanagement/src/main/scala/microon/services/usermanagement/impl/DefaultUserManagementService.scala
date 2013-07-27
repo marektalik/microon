@@ -1,34 +1,17 @@
 package microon.services.usermanagement.impl
 
-import microon.spi.scala.activeobject.{Void, ActiveObject}
+import microon.spi.scala.activeobject.ActiveObject
 import java.util.concurrent.Future
-import microon.services.userdirectory.UserDirectoryService
-import microon.services.usermanagement.{User, UserManagementService}
 import javax.inject.Inject
+import microon.services.repository.api.scala.RepositoryService
+import microon.services.usermanagement.api.scala.{User, UserManagementService}
+import java.lang.Long
 
-class DefaultUserManagementService(@Inject userDirectoryService: UserDirectoryService, userProperties: Seq[String])
-  extends UserManagementService with ActiveObject {
+class DefaultUserManagementService[U <: User](@Inject repositoryService: RepositoryService[U, Long])
+  extends UserManagementService[U] with ActiveObject {
 
-  def registerUser(username: String): Future[String] = dispatch {
-    userDirectoryService.createUser(Map("username" -> username)).get
-  }
-
-  def userExists(username: String): Future[Boolean] = dispatch {
-    userDirectoryService.loadUserIdByProperty("username", username).get.isDefined
-  }
-
-  def loadUser(id: String): Future[User] = dispatch {
-    User(id, userDirectoryService.loadUserProperties(id).get)
-  }
-
-  def listUsers: Future[Seq[User]] = dispatch {
-    userDirectoryService.listUsersProperties(userProperties).get.map {
-      user => User(user.id, user.properties.keys.foldLeft(Map.empty[String, String])((props, key) => props + (key -> user.properties(key))))
-    }
-  }
-
-  def updateUser(user: User): Future[Void] = void {
-    userDirectoryService.updateUserProperties(user.id, user.properties)
+  def registerUser(user: U): Future[Long] = dispatch {
+    repositoryService.save(user).get.id
   }
 
 }

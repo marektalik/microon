@@ -17,7 +17,7 @@ class DefaultRepositoryService[T, ID <: Serializable]
     repository.save(entity)
   }
 
-  def save[S <: T](entities: Seq[S]): Future[Seq[S]] = dispatch {
+  def saveMany[S <: T](entities: Seq[S]): Future[Seq[S]] = dispatch {
     repository.save(entities).toSeq
   }
 

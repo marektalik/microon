@@ -31,6 +31,7 @@ subprojects {
             changing = true
         }
 
+        testCompile guavaDependency
         testCompile 'junit:junit:4.11'
         testCompile 'org.scalatest:scalatest_2.10:1.9.1'
         testCompile 'org.mockito:mockito-core:1.9.5'
@@ -157,20 +158,11 @@ project('microon-services') {
         }
     }
 
-    project('microon-services-userdirectory') {
-        dependencies {
-            compile 'org.springframework.data:spring-data-mongodb:1.2.1.RELEASE'
-            compile 'commons-logging:commons-logging:1.1.1'
-
-            testCompile scalapiEmbedmongoDependnecy
-        }
-    }
-
     project('microon-services-usermanagement') {
         dependencies {
-            compile project(':microon-services:microon-services-userdirectory')
+            compile project(':microon-services:microon-services-repository')
 
-            testCompile scalapiEmbedmongoDependnecy
+            testCompile guavaDependency
         }
     }
 }

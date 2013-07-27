@@ -1,72 +1,70 @@
 package microon.services.usermanagement.impl
 
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSuite}
+import org.scalatest.{BeforeAndAfter, FunSuite}
 import microon.ri.boot.spring.scala.SpringScalaBoot
 import org.springframework.scala.context.function.{ContextSupport, FunctionalConfiguration}
-import org.springframework.data.mongodb.core.MongoTemplate
-import microon.services.userdirectory.mongo.MongoUserDirectoryService
-import microon.services.usermanagement.{User, UserManagementService}
-import scalapi.embedmongo.EmbedMongoServer
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
+import microon.services.usermanagement.api.scala.{User, UserManagementService}
+import org.mockito.Mockito._
+import org.mockito.BDDMockito._
+import microon.services.repository.api.scala.RepositoryService
+import org.scalatest.mock.MockitoSugar
+import com.google.common.util.concurrent.Futures.immediateFuture
 
 @RunWith(classOf[JUnitRunner])
-class DefaultUserManagementServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
+class DefaultUserManagementServiceTest extends FunSuite with BeforeAndAfter {
 
   // Services fixtures
 
   val boot = SpringScalaBoot[TestConfig].start()
-  val mongoServer = boot.context[EmbedMongoServer]
-  var service = boot.context[UserManagementService]
-
-  override def afterAll(configMap: Map[String, Any]) {
-    mongoServer.stop()
-  }
+  val repository = boot.context[RepositoryService[TestUser, java.lang.Long]]
+  var service = boot.context[UserManagementService[TestUser]]
 
   before {
-    mongoServer.client.dropDatabase(MongoUserDirectoryService.userDirectoryDBName)
+    reset(repository)
   }
 
   // Data fixtures
 
-  val username = "Henry"
+  val user = TestUser()
 
   // Tests
 
-  test("Should not find user.") {
-    expectResult(false) {
-      service.userExists("randomUsername").get
-    }
+  test("Should register user.") {
+    // Given
+    given(repository.save(user)).willReturn(immediateFuture(TestUser(1)))
+
+    // When
+    service.registerUser(user).get
+
+    // Then
+    verify(repository).save(user)
   }
 
-  test("Should find user.") {
-    service.registerUser(username).get
-    assert(service.userExists(username).get)
-  }
+  test("Should return id of registered user.") {
+    // Given
+    val mockedId = -1
+    given(repository.save(user)).willReturn(immediateFuture(TestUser(mockedId)))
 
-  test("Should load user.") {
-    val id = service.registerUser(username).get
-    expectResult(User(id, Map("username" -> username))) {
-      service.loadUser(id).get
-    }
+    // When
+    val id = service.registerUser(user).get
+
+    // Then
+    assert(mockedId === id)
   }
 
 }
 
-class TestConfig extends FunctionalConfiguration with ContextSupport {
+class TestConfig extends FunctionalConfiguration with ContextSupport with MockitoSugar {
   enableAnnotationConfig()
 
-  val mongoServer = bean() {
-    new EmbedMongoServer
+  val repository = bean() {
+    mock[RepositoryService[TestUser, java.lang.Long]]
   }
 
-  val mongoTemplate = bean() {
-    new MongoTemplate(mongoServer().client, MongoUserDirectoryService.userDirectoryDBName)
-  }
-
-  val directoryService = bean()(new MongoUserDirectoryService(mongoTemplate()))
-
-
-  bean()(new DefaultUserManagementService(directoryService(), Seq("foo", "bar")))
+  bean()(new DefaultUserManagementService(repository()))
 
 }
+
+case class TestUser(var id: java.lang.Long = null) extends User

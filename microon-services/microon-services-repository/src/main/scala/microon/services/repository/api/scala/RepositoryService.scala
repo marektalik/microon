@@ -9,7 +9,7 @@ trait RepositoryService[T, ID <: Serializable] {
 
   def save[S <: T](entity: S): Future[S]
 
-  def save[S <: T](entities: Seq[S]): Future[Seq[S]]
+  def saveMany[S <: T](entities: Seq[S]): Future[Seq[S]]
 
   def findOne(id: ID): Future[T]
 

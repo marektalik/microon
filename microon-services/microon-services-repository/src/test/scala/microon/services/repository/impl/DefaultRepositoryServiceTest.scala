@@ -28,7 +28,7 @@ class DefaultRepositoryServiceTest extends FunSuite with BeforeAndAfter {
 
   test("Should save entities.") {
     val entities = Seq(foo, foo)
-    service.save(entities).get
+    service.saveMany(entities).get
     val entitiesIterator: java.lang.Iterable[Foo] = entities.toList
     verify(repository).save(entitiesIterator)
   }
