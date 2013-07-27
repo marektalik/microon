@@ -54,6 +54,18 @@ class DefaultUserManagementServiceTest extends FunSuite with BeforeAndAfter {
     assert(mockedId === id)
   }
 
+  test("Should execute callback.") {
+    // Given
+    val savedUser = TestUser(1)
+    given(repository.save(user)).willReturn(immediateFuture(savedUser))
+
+    // When
+    service.registerUser(user).get
+
+    // Then
+    assert(savedUser === TestUserHolder.lastUser)
+  }
+
 }
 
 class TestConfig extends FunctionalConfiguration with ContextSupport with MockitoSugar {
@@ -63,8 +75,20 @@ class TestConfig extends FunctionalConfiguration with ContextSupport with Mockit
     mock[RepositoryService[TestUser, java.lang.Long]]
   }
 
-  bean()(new DefaultUserManagementService(repository()))
+  val callbacks = bean() {
+    Seq(
+      BeforeUserRegistrationCallback[TestUser] {
+        case user: TestUser => TestUserHolder.lastUser = user
+      }
+    )
+  }
+
+  bean()(new DefaultUserManagementService(repository(), callbacks()))
 
 }
 
 case class TestUser(var id: java.lang.Long = null) extends User
+
+object TestUserHolder {
+  var lastUser: TestUser = _
+}

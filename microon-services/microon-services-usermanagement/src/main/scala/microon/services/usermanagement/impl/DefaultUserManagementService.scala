@@ -7,11 +7,15 @@ import microon.services.repository.api.scala.RepositoryService
 import microon.services.usermanagement.api.scala.{User, UserManagementService}
 import java.lang.Long
 
-class DefaultUserManagementService[U <: User](@Inject repositoryService: RepositoryService[U, Long])
+class DefaultUserManagementService[U <: User]
+(@Inject repositoryService: RepositoryService[U, Long],
+ @Inject beforeUserRegistrationCallbacks: Seq[BeforeUserRegistrationCallback[U]] = Seq.empty)
   extends UserManagementService[U] with ActiveObject {
 
   def registerUser(user: U): Future[Long] = dispatch {
-    repositoryService.save(user).get.id
+    val savedUser = repositoryService.save(user).get
+    beforeUserRegistrationCallbacks.foreach(_.callback(savedUser))
+    savedUser.id
   }
 
 }
