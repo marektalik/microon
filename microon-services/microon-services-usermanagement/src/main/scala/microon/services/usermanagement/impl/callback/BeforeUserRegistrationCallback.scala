@@ -1,4 +1,4 @@
-package microon.services.usermanagement.impl
+package microon.services.usermanagement.impl.callback
 
 import microon.services.usermanagement.api.scala.User
 import scala.PartialFunction

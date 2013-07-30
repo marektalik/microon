@@ -11,6 +11,7 @@ import org.mockito.BDDMockito._
 import microon.services.repository.api.scala.RepositoryService
 import org.scalatest.mock.MockitoSugar
 import com.google.common.util.concurrent.Futures.immediateFuture
+import microon.services.usermanagement.impl.callback.BeforeUserRegistrationCallback
 
 @RunWith(classOf[JUnitRunner])
 class DefaultUserManagementServiceTest extends FunSuite with BeforeAndAfter {
@@ -56,14 +57,13 @@ class DefaultUserManagementServiceTest extends FunSuite with BeforeAndAfter {
 
   test("Should execute callback.") {
     // Given
-    val savedUser = TestUser(1)
-    given(repository.save(user)).willReturn(immediateFuture(savedUser))
+    given(repository.save(user)).willReturn(immediateFuture(TestUser(1)))
 
     // When
     service.registerUser(user).get
 
     // Then
-    assert(savedUser === TestUserHolder.lastUser)
+    assert(user === TestUserHolder.lastUser)
   }
 
 }
@@ -75,7 +75,7 @@ class TestConfig extends FunctionalConfiguration with ContextSupport with Mockit
     mock[RepositoryService[TestUser, java.lang.Long]]
   }
 
-  val callbacks = bean() {
+  val beforeCallbacks = bean() {
     Seq(
       BeforeUserRegistrationCallback[TestUser] {
         case user: TestUser => TestUserHolder.lastUser = user
@@ -83,11 +83,15 @@ class TestConfig extends FunctionalConfiguration with ContextSupport with Mockit
     )
   }
 
-  bean()(new DefaultUserManagementService(repository(), callbacks()))
+  bean()(new DefaultUserManagementService(repository(), beforeCallbacks(), Seq.empty, null))
 
 }
 
-case class TestUser(var id: java.lang.Long = null) extends User
+case class TestUser(var id: java.lang.Long = null, var active: Boolean = true) extends User {
+  def active(isActive: Boolean) {
+    this.active = isActive
+  }
+}
 
 object TestUserHolder {
   var lastUser: TestUser = _
