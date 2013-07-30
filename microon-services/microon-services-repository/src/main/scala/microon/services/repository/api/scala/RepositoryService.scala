@@ -11,7 +11,7 @@ trait RepositoryService[T, ID <: Serializable] {
 
   def saveMany[S <: T](entities: Seq[S]): Future[Seq[S]]
 
-  def findOne(id: ID): Future[T]
+  def findOne(id: ID): Future[Option[T]]
 
   def exists(id: ID): Future[Boolean]
 

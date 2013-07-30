@@ -21,8 +21,8 @@ class DefaultRepositoryService[T, ID <: Serializable]
     repository.save(entities).toSeq
   }
 
-  def findOne(id: ID): Future[T] = dispatch {
-    repository.findOne(id)
+  def findOne(id: ID): Future[Option[T]] = dispatch {
+    Option(repository.findOne(id))
   }
 
   def exists(id: ID): Future[Boolean] = dispatch {

@@ -25,7 +25,7 @@ class DefaultUserManagementService[U <: User, T <: UserActivationToken]
   def activateUser(userId: scala.Long, code: String): Future[Void] = void {
     val token = tokenRepositoryService.findOneByQuery(code).get
     if (token.userId == userId) {
-      val user = repositoryService.findOne(userId).get
+      val user = repositoryService.findOne(userId).get.get
       user.active(true)
       repositoryService.save(user)
     }
