@@ -17,7 +17,7 @@ subprojects {
         camelVersion = '2.11.0'
         guavaDependency = 'com.google.guava:guava:14.0.1'
         scalaVersion = '2.10.2'
-        scalapiVersion = '0.3-SNAPSHOT'
+        scalapiVersion = '0.3'
         scalapiEmbedmongoDependnecy = "com.github.scalapi:scalapi-embedmongo:$scalapiVersion"
         scalapiJdkDependnecy = "com.github.scalapi:scalapi-jdk:$scalapiVersion"
     }
