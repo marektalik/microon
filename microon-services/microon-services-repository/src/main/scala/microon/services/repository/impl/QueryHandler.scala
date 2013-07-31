@@ -4,6 +4,8 @@ import org.springframework.data.domain.{Sort, Page, Pageable}
 
 trait QueryHandler[T] {
 
+  def supports(query: Any): Boolean
+
   def countByQuery(query: Any): Long
 
   def findAllByQuery(query: Any): Seq[T]
