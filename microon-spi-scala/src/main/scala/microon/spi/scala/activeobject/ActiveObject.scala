@@ -11,7 +11,7 @@ trait ActiveObject {
   /**
    * [[microon.spi.scala.activeobject.ActiveObjectDispatcher]] used to delegate the execution of the method.
    */
-  @Inject private[activeobject] var activeObjectDispatcher: ActiveObjectDispatcher = _
+  @Inject private var activeObjectDispatcher: ActiveObjectDispatcher = _
 
   protected def activeObjectDispatcher(activeObjectDispatcher: ActiveObjectDispatcher) {
     this.activeObjectDispatcher = activeObjectDispatcher
