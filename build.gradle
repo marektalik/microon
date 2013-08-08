@@ -18,26 +18,26 @@ subprojects {
         guavaDependency = 'com.google.guava:guava:14.0.1'
         scalaVersion = '2.10.2'
         scalapiVersion = '0.4-SNAPSHOT'
-        scalapiHibernateDependnecy = "com.github.scalapi:scalapi-hibernate:$scalapiVersion"
-        scalapiJdkDependnecy = "com.github.scalapi:scalapi-jdk:$scalapiVersion"
-        scalapiQueryDslDependnecy = "com.github.scalapi:scalapi-querydsl:$scalapiVersion"
+        scalapiHibernateDependency = "com.github.scalapi:scalapi-hibernate:$scalapiVersion"
+        scalapiQueryDslDependency = "com.github.scalapi:scalapi-querydsl:$scalapiVersion"
+        springScalaDependency = 'org.springframework.scala:spring-scala:1.0.0.BUILD-SNAPSHOT'
     }
 
     dependencies {
-        compile "org.scala-lang:scala-library:$scalaVersion"
-        compile "org.scala-lang:scala-reflect:$scalaVersion"
-        compile 'javax.inject:javax.inject:1'
-        compile 'org.slf4j:slf4j-api:1.7.5'
-        compile(scalapiJdkDependnecy) {
+        compile("com.github.scalapi:scalapi-jdk:$scalapiVersion") {
             changing = true
         }
+        compile 'javax.inject:javax.inject:1'
+        compile "org.scala-lang:scala-library:$scalaVersion"
+        compile "org.scala-lang:scala-reflect:$scalaVersion"
+        compile 'org.slf4j:slf4j-api:1.7.5'
 
         testCompile guavaDependency
         testCompile 'junit:junit:4.11'
         testCompile 'org.scalatest:scalatest_2.10:1.9.1'
         testCompile 'org.mockito:mockito-core:1.9.5'
         testCompile 'ch.qos.logback:logback-classic:1.0.13'
-        testCompile 'org.springframework.scala:spring-scala:1.0.0.BUILD-SNAPSHOT'
+        testCompile springScalaDependency
     }
 
     repositories {
@@ -119,7 +119,8 @@ project('microon-ri') {
     dependencies {
         compile project(':microon-spi-scala')
 
-        optional 'org.springframework.scala:spring-scala:1.0.0.BUILD-SNAPSHOT'
+        optional guavaDependency
+        optional springScalaDependency
     }
 }
 
@@ -158,10 +159,10 @@ project('microon-services') {
             compile 'org.springframework.data:spring-data-commons:1.5.2.RELEASE'
             optional 'com.mysema.querydsl:querydsl-jpa:3.2.0'
 
-            testCompile(scalapiHibernateDependnecy) {
+            testCompile(scalapiHibernateDependency) {
                 changing = true
             }
-            testCompile(scalapiQueryDslDependnecy) {
+            testCompile(scalapiQueryDslDependency) {
                 changing = true
             }
         }

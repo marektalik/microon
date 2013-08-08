@@ -13,6 +13,10 @@ trait ActiveObject {
    */
   @Inject private[activeobject] var activeObjectDispatcher: ActiveObjectDispatcher = _
 
+  protected def activeObjectDispatcher(activeObjectDispatcher: ActiveObjectDispatcher) {
+    this.activeObjectDispatcher = activeObjectDispatcher
+  }
+
   /**
    * Method called by Active Object service in order to dispatch the result of the executed operation.
    *
