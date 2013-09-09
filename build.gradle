@@ -1,13 +1,16 @@
 subprojects {
     // Maven compatibility
+
     apply plugin: 'maven'
     group = 'com.github.microon'
     version = '0.1-SNAPSHOT'
 
     // JVM
+
     apply plugin: 'scala'
 
     // Dependencies
+
     apply plugin: 'propdeps'
     apply plugin: 'propdeps-maven'
     apply plugin: 'propdeps-idea'
@@ -48,6 +51,7 @@ subprojects {
     }
 
     // Releasing
+
     apply plugin: 'signing'
     ext.isReleaseVersion = !version.endsWith("-SNAPSHOT")
 
