@@ -7,7 +7,7 @@ import java.lang.Long
 import microon.services.useractivation.api.scala.UserActivationService
 
 class DefaultUserActivationService[U <: ActivableUser, T <: UserActivationToken]
-(repositoryService: RepositoryService[U, Long],
+(userRepositoryService: RepositoryService[U, Long],
  tokenRepositoryService: RepositoryService[T, java.lang.Long],
  codeQueryFactory: CodeQueryFactory)
   extends UserActivationService with ActiveObject {
@@ -15,9 +15,9 @@ class DefaultUserActivationService[U <: ActivableUser, T <: UserActivationToken]
   def activateUser(userId: scala.Long, code: String): Future[Void] = void {
     val token = tokenRepositoryService.findOneByQuery(codeQueryFactory.codeToQuery(code)).get
     if (token.userId == userId) {
-      val user = repositoryService.findOne(userId).get.get
+      val user = userRepositoryService.findOne(userId).get.get
       user.active(true)
-      repositoryService.save(user)
+      userRepositoryService.save(user)
     }
   }
 
