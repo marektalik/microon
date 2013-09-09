@@ -20,7 +20,7 @@ subprojects {
         scalapiVersion = '0.4-SNAPSHOT'
         scalapiHibernateDependency = "com.github.scalapi:scalapi-hibernate:$scalapiVersion"
         scalapiQueryDslDependency = "com.github.scalapi:scalapi-querydsl:$scalapiVersion"
-        springScalaDependency = 'org.springframework.scala:spring-scala:1.0.0.BUILD-SNAPSHOT'
+        springScalaDependency = 'org.springframework.scala:spring-scala_2.10:1.0.0.RC1'
     }
 
     dependencies {
@@ -44,7 +44,7 @@ subprojects {
         mavenLocal()
         mavenCentral()
         maven { url 'http://repo.springsource.org/snapshot' }
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url 'https://repo.springsource.org/libs-milestone' }
     }
 
     // Releasing
