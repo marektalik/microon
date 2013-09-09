@@ -1,4 +1,4 @@
-package microon.services.useractivation.api.scala
+package microon.services.useractivation.impl
 
 trait UserActivationToken {
 

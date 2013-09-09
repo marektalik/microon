@@ -1,4 +1,4 @@
-package microon.services.useractivation.api.scala
+package microon.services.useractivation.impl
 
 import microon.services.usermanagement.api.scala.User
 

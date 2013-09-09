@@ -2,7 +2,6 @@ package microon.services.useractivation.impl
 
 import microon.services.repository.api.scala.RepositoryService
 import microon.services.usermanagement.impl.callback.AfterUserRegistrationCallback
-import microon.services.useractivation.api.scala.{ActivableUser, UserActivationToken}
 
 class ActivationRequiredCallback[U <: ActivableUser, T <: UserActivationToken]
 (userActivationTokenFactory: UserActivationTokenFactory[T],

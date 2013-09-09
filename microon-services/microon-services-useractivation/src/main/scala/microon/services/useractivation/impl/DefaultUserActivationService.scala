@@ -5,7 +5,7 @@ import java.util.concurrent.Future
 import microon.services.repository.api.scala.RepositoryService
 import java.lang.Long
 import microon.services.usermanagement.impl.callback.{BeforeUserRegistrationCallback, AfterUserRegistrationCallback}
-import microon.services.useractivation.api.scala.{UserActivationService, UserActivationToken, ActivableUser}
+import microon.services.useractivation.api.scala.UserActivationService
 
 class DefaultUserActivationService[U <: ActivableUser, T <: UserActivationToken]
 (repositoryService: RepositoryService[U, Long],
