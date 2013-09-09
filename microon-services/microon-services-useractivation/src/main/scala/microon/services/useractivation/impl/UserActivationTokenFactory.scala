@@ -1,4 +1,4 @@
-package microon.services.usermanagement.impl.callback.activation
+package microon.services.useractivation.impl
 
 trait UserActivationTokenFactory[T] {
 

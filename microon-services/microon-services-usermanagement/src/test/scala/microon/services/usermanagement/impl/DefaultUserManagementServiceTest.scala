@@ -83,15 +83,11 @@ class TestConfig extends FunctionalConfiguration with ContextSupport with Mockit
     )
   }
 
-  bean()(new DefaultUserManagementService(repository(), beforeCallbacks(), Seq.empty, null))
+  bean()(new DefaultUserManagementService(repository(), beforeCallbacks(), Seq.empty))
 
 }
 
-case class TestUser(var id: java.lang.Long = null, var active: Boolean = true) extends User {
-  def active(isActive: Boolean) {
-    this.active = isActive
-  }
-}
+case class TestUser(var id: java.lang.Long = null, var active: Boolean = true) extends User
 
 object TestUserHolder {
   var lastUser: TestUser = _

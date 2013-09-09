@@ -172,6 +172,12 @@ project('microon-services') {
         }
     }
 
+    project('microon-services-useractivation') {
+        dependencies {
+            compile project(':microon-services:microon-services-usermanagement')
+        }
+    }
+
     project('microon-services-usermanagement') {
         dependencies {
             compile project(':microon-services:microon-services-repository')
