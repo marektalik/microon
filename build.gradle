@@ -175,6 +175,7 @@ project('microon-services') {
     project('microon-services-useractivation') {
         dependencies {
             compile project(':microon-services:microon-services-usermanagement')
+            optional(scalapiQueryDslDependency)
         }
     }
 
