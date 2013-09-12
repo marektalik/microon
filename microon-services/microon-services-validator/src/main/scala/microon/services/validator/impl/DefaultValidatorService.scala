@@ -3,10 +3,9 @@ package microon.services.validator.impl
 import microon.services.validator.api.scala.ValidatorService
 import java.util.concurrent.Future
 import microon.spi.scala.activeobject.{ActiveObjectDispatcher, ActiveObject}
-import javax.inject.Inject
 import scala.collection.JavaConversions._
 
-class DefaultValidatorService(@Inject subjectHandlers: Seq[_ <: ValidationSubjectHandler[_]])
+class DefaultValidatorService(subjectHandlers: Seq[_ <: ValidationSubjectHandler[_]])
   extends ValidatorService with ActiveObject {
 
   def validate(subject: Any): Future[Option[Array[String]]] = dispatch {
