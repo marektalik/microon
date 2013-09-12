@@ -158,6 +158,16 @@ project('microon-services') {
         }
     }
 
+    project('microon-services-contacts') {
+        dependencies {
+            compile project(':microon-ri')
+
+            compile('org.openengsb.wrapped:com.google.gdata-contacts:1.41.5.w1') {
+                exclude group: 'com.google.collections', module: 'google-collections' //by both name and group
+            }
+        }
+    }
+
     project('microon-services-repository') {
         dependencies {
             compile 'org.springframework.data:spring-data-commons:1.5.2.RELEASE'
