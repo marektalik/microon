@@ -13,7 +13,7 @@ trait ActiveObject {
    */
   @Inject private var activeObjectDispatcher: ActiveObjectDispatcher = _
 
-  protected def activeObjectDispatcher(activeObjectDispatcher: ActiveObjectDispatcher) {
+  def activeObjectDispatcher(activeObjectDispatcher: ActiveObjectDispatcher) {
     this.activeObjectDispatcher = activeObjectDispatcher
   }
 
