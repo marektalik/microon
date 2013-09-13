@@ -5,6 +5,14 @@ import java.util.concurrent.Future
 import microon.spi.scala.activeobject.{ActiveObjectDispatcher, ActiveObject}
 import scala.collection.JavaConversions._
 
+/**
+ * Default implementation of [[microon.services.validator.api.scala.ValidatorService]] delegating the validation
+ * process to the particular [[microon.services.validator.impl.ValidationSubjectHandler]] instance supporting given
+ * subject.
+ *
+ * @param subjectHandlers sequence of [[microon.services.validator.impl.ValidationSubjectHandler]] instances responsible
+ *                        for the actual validation.
+ */
 class DefaultValidatorService(subjectHandlers: Seq[_ <: ValidationSubjectHandler[_]])
   extends ValidatorService with ActiveObject {
 
