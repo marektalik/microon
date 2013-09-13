@@ -162,9 +162,7 @@ project('microon-services') {
         dependencies {
             compile project(':microon-ri')
 
-            compile('org.openengsb.wrapped:com.google.gdata-contacts:1.41.5.w1') {
-                exclude group: 'com.google.collections', module: 'google-collections' //by both name and group
-            }
+            compile 'com.google.gdata:core:1.47.1'
         }
     }
 
