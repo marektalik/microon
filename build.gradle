@@ -18,7 +18,7 @@ subprojects {
 
     ext {
         camelVersion = '2.11.0'
-        guavaDependency = 'com.google.guava:guava:14.0.1'
+        guavaDependency = 'com.google.guava:guava:15.0'
         scalaVersion = '2.10.2'
         scalapiVersion = '0.4'
         scalapiHibernateDependency = "com.github.scalapi:scalapi-hibernate:$scalapiVersion"
