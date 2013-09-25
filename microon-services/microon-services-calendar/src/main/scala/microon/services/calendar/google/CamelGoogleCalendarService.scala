@@ -1,6 +1,5 @@
 package microon.services.calendar.google
 
-import microon.services.calendar.{Event, CalendarService}
 import microon.spi.scala.activeobject.ActiveObject
 import java.util.concurrent.Future
 import org.apache.camel.CamelContext
@@ -9,6 +8,7 @@ import org.apache.camel.component.googlecalendar.commands.ListEvents
 import java.util.Date
 import scala.collection.JavaConversions._
 import org.apache.camel.component.googlecalendar
+import microon.services.calendar.api.scala.{CalendarService, Event}
 
 class CamelGoogleCalendarService(camelContext: CamelContext, calendarId: String, serviceAccountId: String, privateKeyFile: String)
   extends CalendarService with ActiveObject {

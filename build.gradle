@@ -1,20 +1,22 @@
-subprojects {
+allprojects {
     // Maven compatibility
-
     apply plugin: 'maven'
     group = 'com.github.microon'
     version = '0.1-SNAPSHOT'
 
+    // Dependencies
+    apply plugin: 'propdeps'
+    apply plugin: 'propdeps-maven'
+    apply plugin: 'propdeps-idea'
+    apply plugin: 'propdeps-eclipse'
+}
+
+subprojects {
     // JVM
 
     apply plugin: 'scala'
 
     // Dependencies
-
-    apply plugin: 'propdeps'
-    apply plugin: 'propdeps-maven'
-    apply plugin: 'propdeps-idea'
-    apply plugin: 'propdeps-eclipse'
 
     ext {
         camelVersion = '2.11.0'
@@ -44,8 +46,8 @@ subprojects {
     }
 
     repositories {
-        mavenLocal()
         mavenCentral()
+        mavenLocal()
         maven { url 'http://repo.springsource.org/snapshot' }
         maven { url 'http://repo.springsource.org/libs-milestone' }
     }
@@ -150,6 +152,7 @@ project('microon-services') {
 
     project('microon-services-calendar') {
         dependencies {
+            compile guavaDependency
             compile "org.apache.camel:camel-scala:$camelVersion"
             compile 'com.google.apis:google-api-services-calendar:v3-rev47-1.15.0-rc'
             compile 'com.google.http-client:google-http-client-jackson2:1.15.0-rc'

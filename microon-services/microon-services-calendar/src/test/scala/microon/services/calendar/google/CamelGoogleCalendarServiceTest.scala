@@ -3,7 +3,6 @@ package microon.services.calendar.google
 import org.apache.camel.CamelContext
 import org.apache.camel.component.googlecalendar.commands.{ListEvents => CamelListEvents}
 import java.util.Date
-import scala.collection.JavaConversions._
 import org.scalatest.FunSuite
 import org.scalatest.mock.MockitoSugar
 import org.mockito.{Matchers, Mockito}
@@ -11,7 +10,7 @@ import org.mockito.BDDMockito._
 import Matchers._
 import Matchers.{eq => eql}
 import org.springframework.scala.context.function.FunctionalConfiguration
-import microon.services.calendar.Event
+import microon.services.calendar.api.scala.Event
 import org.apache.camel.component.googlecalendar.{Event => CamelEvent}
 import java.util.{List => JavaList}
 import microon.ri.boot.spring.scala.SpringScalaBoot

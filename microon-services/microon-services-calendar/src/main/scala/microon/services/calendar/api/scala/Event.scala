@@ -1,4 +1,4 @@
-package microon.services.calendar
+package microon.services.calendar.api.scala
 
 import java.util.Date
 
