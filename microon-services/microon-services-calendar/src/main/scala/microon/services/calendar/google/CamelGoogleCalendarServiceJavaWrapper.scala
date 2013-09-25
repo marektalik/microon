@@ -4,6 +4,8 @@ import microon.services.calendar.api.java.{CalendarService => JavaCalendarServic
 import java.util.Date
 import java.util.concurrent.Future
 import microon.services.calendar.api.scala.CalendarService
+import com.google.common.util.concurrent.Futures.immediateFuture
+import scala.collection.JavaConversions._
 
 class CamelGoogleCalendarServiceJavaWrapper(calendarService: CalendarService) extends JavaCalendarService {
 
