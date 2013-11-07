@@ -6,7 +6,6 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
-import org.apache.camel.Component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -25,16 +24,14 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class GoogleCalendarEndpoint extends DefaultEndpoint {
 
     private final static Logger LOG = getLogger(GoogleCalendarEndpoint.class);
-
-    private final HttpTransport httpTransport;
     private final JsonFactory JSON_FACTORY = new JacksonFactory();
-
+    private HttpTransport httpTransport;
     private String calendarId;
     private String serviceAccountId;
     private File privateKeyFile;
     private Calendar calendar;
 
-    protected GoogleCalendarEndpoint(String endpointUri, Component component,
+    protected GoogleCalendarEndpoint(String endpointUri, GoogleCalendarComponent component,
                                      String calendarId, String serviceAccountId, File privateKeyFile) {
         super(endpointUri, component);
         this.calendarId = calendarId;
@@ -50,18 +47,25 @@ public class GoogleCalendarEndpoint extends DefaultEndpoint {
         }
     }
 
+    protected GoogleCalendarEndpoint(String endpointUri, GoogleCalendarComponent component, Calendar calendar) {
+        super(endpointUri, component);
+        this.calendar = calendar;
+    }
+
     @Override
     protected void doStart() throws Exception {
         super.doStart();
         LOG.debug("Building Google Credentials for calendar: {}", calendarId);
-        GoogleCredential credential = new GoogleCredential.Builder()
-                .setTransport(httpTransport)
-                .setJsonFactory(JSON_FACTORY)
-                .setServiceAccountId(serviceAccountId)
-                .setServiceAccountScopes(singletonList(CalendarScopes.CALENDAR))
-                .setServiceAccountPrivateKeyFromP12File(privateKeyFile)
-                .build();
-        calendar = new Calendar.Builder(httpTransport, JSON_FACTORY, credential).build();
+        if (calendar == null) {
+            GoogleCredential credential = new GoogleCredential.Builder()
+                    .setTransport(httpTransport)
+                    .setJsonFactory(JSON_FACTORY)
+                    .setServiceAccountId(serviceAccountId)
+                    .setServiceAccountScopes(singletonList(CalendarScopes.CALENDAR))
+                    .setServiceAccountPrivateKeyFromP12File(privateKeyFile)
+                    .build();
+            calendar = new Calendar.Builder(httpTransport, JSON_FACTORY, credential).build();
+        }
     }
 
     @Override

@@ -20,7 +20,7 @@ class CamelGoogleCalendarServiceTest extends FunSuite with MockitoSugar {
 
   // Data fixtures
 
-  val camelEvent = new CamelEvent("summary", new Date, List("attendee"))
+  val camelEvent = new CamelEvent("eventId", "summary", new Date, new Date, List("attendee"))
 
   // Collaborators fixtures
 
@@ -34,7 +34,7 @@ class CamelGoogleCalendarServiceTest extends FunSuite with MockitoSugar {
     given(
       camelContext.createProducerTemplate.requestBody(anyString, any[CamelListEvents], eql(classOf[JavaList[CamelEvent]]))
     ).willReturn(List(camelEvent))
-    val expectedMicroonEvent = Event(camelEvent.summary, camelEvent.from, camelEvent.attendees)
+    val expectedMicroonEvent = Event(camelEvent.summary, camelEvent.from, camelEvent.to, camelEvent.attendees)
 
     expectResult(Seq(expectedMicroonEvent)) {
       service.listEvents(from = None).get

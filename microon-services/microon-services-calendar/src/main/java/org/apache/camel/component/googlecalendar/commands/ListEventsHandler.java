@@ -26,15 +26,17 @@ public class ListEventsHandler {
 
             List<Event> camelEvents = new LinkedList<Event>();
             for (com.google.api.services.calendar.model.Event event : eventsQuery.execute().getItems()) {
+                String eventId = event.getId();
                 String summary = event.getSummary();
                 Date from = new Date(event.getStart().getDateTime().getValue());
+                Date to = new Date(event.getEnd().getDateTime().getValue());
                 List<String> attendees = new LinkedList<String>();
                 if (event.getAttendees() != null) {
                     for (EventAttendee attendee : event.getAttendees()) {
                         attendees.add(attendee.getEmail());
                     }
                 }
-                camelEvents.add(new org.apache.camel.component.googlecalendar.Event(summary, from, attendees));
+                camelEvents.add(new org.apache.camel.component.googlecalendar.Event(eventId, summary, from, to, attendees));
             }
             exchange.getOut().setBody(camelEvents);
         } catch (IOException e) {

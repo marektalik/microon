@@ -1,5 +1,6 @@
 package org.apache.camel.component.googlecalendar;
 
+import com.google.api.services.calendar.Calendar;
 import org.apache.camel.impl.DefaultComponent;
 
 import java.io.File;
@@ -11,8 +12,13 @@ public class GoogleCalendarComponent extends DefaultComponent {
     private String serviceAccountId;
     private File privateKeyFile;
 
+    private Calendar calendar;
+
     @Override
     protected GoogleCalendarEndpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+        if (calendar != null) {
+            return new GoogleCalendarEndpoint(uri, this, calendar);
+        }
         return new GoogleCalendarEndpoint(uri, this, resolveCalendarId(remaining), serviceAccountId, privateKeyFile);
     }
 
@@ -46,6 +52,14 @@ public class GoogleCalendarComponent extends DefaultComponent {
 
     public void setPrivateKeyFile(File privateKeyFile) {
         this.privateKeyFile = privateKeyFile;
+    }
+
+    public Calendar getCalendar() {
+        return calendar;
+    }
+
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
     }
 
 }

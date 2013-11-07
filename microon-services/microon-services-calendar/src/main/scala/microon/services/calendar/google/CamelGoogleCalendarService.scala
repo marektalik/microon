@@ -31,7 +31,7 @@ class CamelGoogleCalendarService(camelContext: CamelContext, calendarId: String,
   def listEvents(from: Option[Date]): Future[Seq[Event]] = dispatch {
     val command = new ListEvents(from.getOrElse(null))
     camelContext.createProducerTemplate.requestBody(startEndpoint, command, classOf[java.util.List[googlecalendar.Event]]).map {
-      event => new Event(event.summary, event.from, event.attendees)
+      event => new Event(event.summary, event.from, event.to, event.attendees)
     }
   }
 
