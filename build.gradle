@@ -22,7 +22,7 @@ subprojects {
         camelVersion = '2.11.0'
         guavaDependency = 'com.google.guava:guava:15.0'
         scalaVersion = '2.10.2'
-        scalapiVersion = '0.4'
+        scalapiVersion = '0.5'
         scalapiHibernateDependency = "com.github.scalapi:scalapi-hibernate:$scalapiVersion"
         scalapiQueryDslDependency = "com.github.scalapi:scalapi-querydsl:$scalapiVersion"
         springScalaDependency = 'org.springframework.scala:spring-scala_2.10:1.0.0.RC1'
