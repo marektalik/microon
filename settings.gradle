@@ -1,5 +1,6 @@
 include 'microon-spi-scala', 'microon-ri',
         'microon-services',
+        'microon-services:microon-services-audit',
         'microon-services:microon-services-auth',
         'microon-services:microon-services-calendar',
         'microon-services:microon-services-contacts',

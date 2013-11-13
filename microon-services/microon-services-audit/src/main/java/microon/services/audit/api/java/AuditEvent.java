@@ -1,0 +1,47 @@
+package microon.services.audit.api.java;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class AuditEvent {
+
+    private String message;
+
+    private Map<String, String> context = new HashMap<String, String>();
+
+    private String[] tags = new String[0];
+
+    public AuditEvent() {
+    }
+
+    public AuditEvent(String message, Map<String, String> context, String[] tags) {
+        this.message = message;
+        this.context = context;
+        this.tags = tags;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Map<String, String> getContext() {
+        return context;
+    }
+
+    public void setContext(Map<String, String> context) {
+        this.context = context;
+    }
+
+    public String[] getTags() {
+        return tags;
+    }
+
+    public void setTags(String[] tags) {
+        this.tags = tags;
+    }
+
+}

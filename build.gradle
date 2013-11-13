@@ -19,7 +19,7 @@ subprojects {
     // Dependencies
 
     ext {
-        camelVersion = '2.11.0'
+        camelVersion = '2.12.1'
         guavaDependency = 'com.google.guava:guava:15.0'
         scalaVersion = '2.10.2'
         scalapiVersion = '0.5'
@@ -136,6 +136,16 @@ project('microon-services') {
             compile project(':microon-spi-scala')
 
             testCompile project(':microon-ri')
+        }
+    }
+
+    project('microon-services-audit') {
+        dependencies {
+            compile "org.apache.camel:camel-scala:$camelVersion"
+            compile "org.apache.camel:camel-mongodb:$camelVersion"
+            compile guavaDependency
+
+            testCompile "com.github.scalapi:scalapi-embedmongo:$scalapiVersion"
         }
     }
 
