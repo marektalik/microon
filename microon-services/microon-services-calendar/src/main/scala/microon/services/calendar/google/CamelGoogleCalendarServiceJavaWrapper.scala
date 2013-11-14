@@ -9,6 +9,6 @@ import com.google.common.util.concurrent.Futures.immediateFuture
 class CamelGoogleCalendarServiceJavaWrapper(calendarService: CalendarService) extends JavaCalendarService {
 
   def listEvents(from: Date): Future[Array[JavaEvent]] =
-    immediateFuture(calendarService.listEvents(Option(from)).get().map(event => new JavaEvent(event.eventId, event.summary, event.from, event.attendees.toArray)).toArray)
+    immediateFuture(calendarService.listEvents(Option(from)).get().map(event => new JavaEvent(event.eventId, event.summary, event.from, event.to, event.attendees.toArray)).toArray)
 
 }
