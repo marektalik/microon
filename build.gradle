@@ -146,7 +146,9 @@ project('microon-services') {
             compile "org.apache.camel:camel-mongodb:$camelVersion"
             compile guavaDependency
 
+            testCompile project(':microon-services:microon-services-repository')
             testCompile "com.github.scalapi:scalapi-embedmongo:$scalapiVersion"
+            testCompile "org.apache.camel:camel-spring:$camelVersion"
         }
     }
 

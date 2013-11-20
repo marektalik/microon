@@ -7,6 +7,7 @@ import org.apache.camel.impl.{SimpleRegistry, DefaultCamelContext}
 import microon.services.audit.api.scala.AuditEvent
 import scalapi.embedmongo.EmbedMongoSupport
 import scala.collection.JavaConversions._
+import CamelMongoAuditService._
 
 @RunWith(classOf[JUnitRunner])
 class CamelMongoAuditServiceTest extends FunSuite with BeforeAndAfter with EmbedMongoSupport {
@@ -23,9 +24,9 @@ class CamelMongoAuditServiceTest extends FunSuite with BeforeAndAfter with Embed
 
   // Data fixtures
 
-  def auditDb = mongo.getDB("audit")
+  def auditDb = mongo.getDB(defaultAuditDatabaseName)
 
-  val event = AuditEvent("message", Map.empty, Seq("tag1"))
+  val event = AuditEvent(None, "message", Map.empty, Seq("tag1"))
 
   before {
     auditDb.dropDatabase()

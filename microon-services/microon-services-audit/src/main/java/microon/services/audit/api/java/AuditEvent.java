@@ -5,6 +5,8 @@ import java.util.Map;
 
 public class AuditEvent {
 
+    private String id;
+
     private String message;
 
     private Map<String, String> context = new HashMap<String, String>();
@@ -14,10 +16,19 @@ public class AuditEvent {
     public AuditEvent() {
     }
 
-    public AuditEvent(String message, Map<String, String> context, String[] tags) {
+    public AuditEvent(String id, String message, Map<String, String> context, String[] tags) {
+        this.id = id;
         this.message = message;
         this.context = context;
         this.tags = tags;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMessage() {
