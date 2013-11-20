@@ -1,7 +1,7 @@
 package microon.services.repository.impl.queryhandler.jpa
 
 import microon.services.repository.impl.QueryHandler
-import org.springframework.data.domain.{Page, Pageable, Sort}
+import org.springframework.data.domain.Pageable
 import com.mysema.query.types.Predicate
 import com.mysema.query.jpa.impl.JPAQuery
 import javax.persistence.EntityManager
@@ -30,9 +30,7 @@ class JpaQueryDslQueryHandler[T: ClassTag](_entityType: Class[T], entityManager:
     jpaQuery.from(pathBuilder).where(predicate).list(pathBuilder)
   }
 
-  def findAllByQuery(query: Any, pageable: Pageable): Page[T] = null
-
-  def findAllByQuery(query: Any, sort: Sort): Seq[T] = Seq.empty
+  def findAllByQuery(query: Any, pageable: Pageable): Seq[T] = null
 
   def findOneByQuery(query: Any): T = {
     val predicate = query.asInstanceOf[Predicate]

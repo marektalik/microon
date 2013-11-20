@@ -1,6 +1,6 @@
 package microon.services.repository.impl
 
-import org.springframework.data.domain.{Sort, Page, Pageable}
+import org.springframework.data.domain.Pageable
 
 trait QueryHandler[T] {
 
@@ -10,9 +10,7 @@ trait QueryHandler[T] {
 
   def findAllByQuery(query: Any): Seq[T]
 
-  def findAllByQuery(query: Any, pageable: Pageable): Page[T]
-
-  def findAllByQuery(query: Any, sort: Sort): Seq[T]
+  def findAllByQuery(query: Any, pageable: Pageable): Seq[T]
 
   def findOneByQuery(query: Any): T
 

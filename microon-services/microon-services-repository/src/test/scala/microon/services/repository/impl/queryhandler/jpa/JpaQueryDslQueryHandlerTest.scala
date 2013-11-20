@@ -6,7 +6,10 @@ import javax.persistence.{Entity, GeneratedValue, Id}
 import com.mysema.query.types._
 import scalapi.querydsl.QueryDslPredicates._
 import scalapi.hibernate.Hibernates.defaultEntityManagerFactory
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class JpaQueryDslQueryHandlerTest extends FunSuite with BeforeAndAfterAll {
 
   // Collaborators fixtures

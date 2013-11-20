@@ -1,7 +1,6 @@
 package microon.services.repository.api.java;
 
 import microon.spi.scala.activeobject.Void;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
@@ -34,15 +33,13 @@ public interface RepositoryService<T, ID extends Serializable> {
 
     Future<Iterable<T>> findAll(Sort sort);
 
-    Future<Page<T>> findAll(Pageable pageable);
+    Future<Iterable<T>> findAll(Pageable pageable);
 
     Future<Long> countByQuery(Object query);
 
     Future<Iterable<T>> findAllByQuery(Object query);
 
-    Future<Page<T>> findAllByQuery(Object query, Pageable pageable);
-
-    Future<Iterable<T>> findAllByQuery(Object query, Sort sort);
+    Future<Iterable<T>> findAllByQuery(Object query, Pageable pageable);
 
     Future<T> findOneByQuery(Object query);
 

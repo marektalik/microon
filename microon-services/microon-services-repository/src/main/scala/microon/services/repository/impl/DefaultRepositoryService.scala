@@ -1,7 +1,7 @@
 package microon.services.repository.impl
 
 import microon.services.repository.api.scala.RepositoryService
-import org.springframework.data.domain.{Sort, Page, Pageable}
+import org.springframework.data.domain.{Sort, Pageable}
 import java.util.concurrent.Future
 import microon.spi.scala.activeobject.{Void, ActiveObject}
 import org.springframework.data.repository.PagingAndSortingRepository
@@ -61,8 +61,8 @@ class DefaultRepositoryService[T, ID <: Serializable]
     repository.findAll(sort).toSeq
   }
 
-  def findAll(pageable: Pageable): Future[Page[T]] = dispatch {
-    repository.findAll(pageable)
+  def findAll(pageable: Pageable): Future[Seq[T]] = dispatch {
+    repository.findAll(pageable).getContent
   }
 
   def countByQuery(query: Any): Future[Long] = dispatch {
@@ -73,12 +73,8 @@ class DefaultRepositoryService[T, ID <: Serializable]
     queryHandler.findAllByQuery(query)
   }
 
-  def findAllByQuery(query: Any, pageable: Pageable): Future[Page[T]] = dispatch {
+  def findAllByQuery(query: Any, pageable: Pageable): Future[Seq[T]] = dispatch {
     queryHandler.findAllByQuery(query, pageable)
-  }
-
-  def findAllByQuery(query: Any, sort: Sort): Future[Seq[T]] = dispatch {
-    queryHandler.findAllByQuery(query, sort)
   }
 
   def findOneByQuery(query: Any): Future[T] = dispatch {

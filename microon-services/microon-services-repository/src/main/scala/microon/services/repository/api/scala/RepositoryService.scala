@@ -2,7 +2,7 @@ package microon.services.repository.api.scala
 
 import java.io.Serializable
 import java.util.concurrent.Future
-import org.springframework.data.domain.{Pageable, Page, Sort}
+import org.springframework.data.domain.{Pageable, Sort}
 import microon.spi.scala.activeobject.Void
 
 trait RepositoryService[T, ID <: Serializable] {
@@ -31,15 +31,13 @@ trait RepositoryService[T, ID <: Serializable] {
 
   def findAll(sort: Sort): Future[Seq[T]]
 
-  def findAll(pageable: Pageable): Future[Page[T]]
+  def findAll(pageable: Pageable): Future[Seq[T]]
 
   def countByQuery(query: Any): Future[Long]
 
   def findAllByQuery(query: Any): Future[Seq[T]]
 
-  def findAllByQuery(query: Any, pageable: Pageable): Future[Page[T]]
-
-  def findAllByQuery(query: Any, sort: Sort): Future[Seq[T]]
+  def findAllByQuery(query: Any, pageable: Pageable): Future[Seq[T]]
 
   def findOneByQuery(query: Any): Future[T]
 
