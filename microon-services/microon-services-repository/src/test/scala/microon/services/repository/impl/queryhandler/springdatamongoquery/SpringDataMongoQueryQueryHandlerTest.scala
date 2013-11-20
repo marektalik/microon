@@ -4,28 +4,26 @@ import org.scalatest.FunSuite
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import scala.beans.BeanProperty
-import org.springframework.context.annotation.{Bean, Configuration, AnnotationConfigApplicationContext}
 import scalapi.embedmongo.EmbedMongoSupport
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.{Criteria, Query}
 import org.springframework.data.domain.PageRequest
+import org.springframework.scala.context.function.{FunctionalConfiguration, FunctionalConfigApplicationContext}
 
 @RunWith(classOf[JUnitRunner])
 class SpringDataMongoQueryQueryHandlerTest extends FunSuite {
 
   // Context fixture
 
-  val applicationContext = new AnnotationConfigApplicationContext(classOf[TestConfig])
-
-  // Collaborators fixture
-
-  val mongoTemplate = applicationContext.getBean(classOf[MongoTemplate])
+  val applicationContext = FunctionalConfigApplicationContext[TestConfig]()
 
   // Test subject fixture
 
-  val handler = new SpringDataMongoQueryQueryHandler(classOf[TestUser], mongoTemplate)
+  val handler = applicationContext[SpringDataMongoQueryQueryHandler[TestUser]]
 
   // Data fixtures
+
+  val mongoTemplate = applicationContext[MongoTemplate]
 
   val fred = new TestUser(null, "Fred", "Flinstone")
   mongoTemplate.save(fred)
@@ -77,12 +75,14 @@ class TestUser(@BeanProperty var id: String,
                @BeanProperty var name: String,
                @BeanProperty var surname: String)
 
-@Configuration
-class TestConfig extends EmbedMongoSupport {
+class TestConfig extends FunctionalConfiguration with EmbedMongoSupport {
 
-  @Bean
-  def mongoTemplate: MongoTemplate = {
+  val mongoTemplate = bean() {
     new MongoTemplate(mongo, "testdb")
+  }
+
+  bean() {
+    SpringDataMongoQueryQueryHandler[TestUser](mongoTemplate())
   }
 
 }

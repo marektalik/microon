@@ -33,3 +33,10 @@ class SpringDataMongoQueryQueryHandler[T: ClassTag](_entityType: Class[T], mongo
   }
 
 }
+
+object SpringDataMongoQueryQueryHandler {
+
+  def apply[T: ClassTag](mongoTemplate: MongoTemplate) =
+    new SpringDataMongoQueryQueryHandler(classTag[T].runtimeClass.asInstanceOf[Class[T]], mongoTemplate)
+
+}
