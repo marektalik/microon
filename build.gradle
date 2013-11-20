@@ -22,10 +22,11 @@ subprojects {
         camelVersion = '2.12.1'
         guavaDependency = 'com.google.guava:guava:15.0'
         scalaVersion = '2.10.2'
-        scalapiVersion = '0.5'
+        scalapiVersion = '0.6'
         scalapiHibernateDependency = "com.github.scalapi:scalapi-hibernate:$scalapiVersion"
         scalapiQueryDslDependency = "com.github.scalapi:scalapi-querydsl:$scalapiVersion"
         springScalaDependency = 'org.springframework.scala:spring-scala_2.10:1.0.0.RC1'
+        queryDslVersion = '3.2.4'
     }
 
     dependencies {
@@ -182,14 +183,19 @@ project('microon-services') {
     project('microon-services-repository') {
         dependencies {
             compile 'org.springframework.data:spring-data-commons:1.5.2.RELEASE'
-            optional 'com.mysema.querydsl:querydsl-jpa:3.2.0'
+            optional "com.mysema.querydsl:querydsl-jpa:${queryDslVersion}"
 
+            optional "com.mysema.querydsl:querydsl-mongodb:${queryDslVersion}"
+            compile 'org.springframework.data:spring-data-mongodb:1.3.2.RELEASE'
+
+            testRuntime 'org.hsqldb:hsqldb:2.2.8'
             testCompile(scalapiHibernateDependency) {
                 changing = true
             }
             testCompile(scalapiQueryDslDependency) {
                 changing = true
             }
+            testCompile "com.github.scalapi:scalapi-embedmongo:$scalapiVersion"
         }
     }
 
