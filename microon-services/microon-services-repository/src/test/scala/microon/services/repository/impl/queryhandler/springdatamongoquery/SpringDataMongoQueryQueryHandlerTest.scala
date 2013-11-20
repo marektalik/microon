@@ -36,37 +36,37 @@ class SpringDataMongoQueryQueryHandlerTest extends FunSuite {
   // Tests
 
   test("Should count Fred.") {
-    expectResult(1) {
+    assertResult(1) {
       handler.countByQuery(Query.query(Criteria.where("name").is(fred.getName)))
     }
   }
 
   test("Should count Willma.") {
-    expectResult(1) {
+    assertResult(1) {
       handler.countByQuery(Query.query(Criteria.where("name").is(willma.getName)))
     }
   }
 
   test("Should find Willma.") {
-    expectResult(Seq(willma.getName)) {
+    assertResult(Seq(willma.getName)) {
       handler.findAllByQuery(Query.query(Criteria.where("name").is(willma.getName))).map(_.getName)
     }
   }
 
   test("Should find first page.") {
-    expectResult(Seq(fred.getName)) {
+    assertResult(Seq(fred.getName)) {
       handler.findAllByQuery(new Query(), new PageRequest(0, 1)).map(_.getName)
     }
   }
 
   test("Should find second page.") {
-    expectResult(Seq(willma.getName)) {
+    assertResult(Seq(willma.getName)) {
       handler.findAllByQuery(new Query(), new PageRequest(1, 1)).map(_.getName)
     }
   }
 
   test("Should find only Fred.") {
-    expectResult(fred.getName) {
+    assertResult(fred.getName) {
       handler.findOneByQuery(Query.query(Criteria.where("name").is(fred.getName))).getName
     }
   }
