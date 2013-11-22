@@ -9,7 +9,6 @@ import microon.services.audit.api.scala.AuditService
 import microon.services.audit.api.java.{AuditService => JAuditService}
 import microon.services.audit.javawrapper.AuditServiceJavaWrapper
 
-
 @Configuration
 class AuditServiceConfiguration {
 
