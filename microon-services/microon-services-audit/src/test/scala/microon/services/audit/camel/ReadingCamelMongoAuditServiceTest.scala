@@ -10,7 +10,7 @@ import microon.services.audit.api.java.{AuditEvent => JAuditEvent}
 import org.springframework.data.mongodb.core.query.Query
 import org.scalatest.matchers.ShouldMatchers
 import scala.collection.JavaConversions._
-import ReadingCamelMongoAuditServiceTestConfig._
+import CamelMongoAuditServiceTestConfig._
 
 @RunWith(classOf[JUnitRunner])
 class ReadingCamelMongoAuditServiceTest extends FunSuite with BeforeAndAfter with ShouldMatchers {
@@ -18,15 +18,16 @@ class ReadingCamelMongoAuditServiceTest extends FunSuite with BeforeAndAfter wit
   // Collaborators fixtures
 
   val ctx = new FunctionalConfigApplicationContext()
-  ctx.registerConfigurations(ReadingCamelMongoAuditServiceTestConfig)
+  ctx.registerConfigurations(CamelMongoAuditServiceTestConfig)
+  ctx.refresh()
 
   // Data fixtures
 
   val event = AuditEvent(None, "message", Map("key" -> "value"), Seq("tag1"))
 
   before {
-    mongoClient().dropDatabase(dbName)
-    auditService().log(event)
+    mongoClient().dropDatabase(auditServiceDbName)
+    auditService.log(event)
   }
 
   // Tests

@@ -17,14 +17,15 @@ class CamelMongoAuditServiceTest extends FunSuite with BeforeAndAfter {
 
   val ctx = new FunctionalConfigApplicationContext()
   ctx.registerConfigurations(CamelMongoAuditServiceTestConfig)
+  ctx.refresh()
 
   // Data fixtures
 
   val event = AuditEvent(None, "message", Map.empty, Seq("tag1"))
 
   before {
-    mongoClient().dropDatabase(dbName)
-    auditService().log(event)
+    mongoClient().dropDatabase(auditServiceDbName)
+    auditService.log(event)
   }
 
   // Tests

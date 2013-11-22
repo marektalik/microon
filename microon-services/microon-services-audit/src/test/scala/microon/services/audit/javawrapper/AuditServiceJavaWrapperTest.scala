@@ -7,8 +7,9 @@ import scalapi.jdk.control.Try
 import org.springframework.scala.context.function.FunctionalConfigApplicationContext
 import microon.services.audit.api.java.{AuditEvent => JAuditEvent}
 import org.springframework.data.mongodb.core.query.Query
-import AuditServiceJavaWrapperTestConfig._
+import microon.services.audit.camel.CamelMongoAuditServiceTestConfig._
 import scala.collection.JavaConversions._
+import microon.services.audit.camel.CamelMongoAuditServiceTestConfig
 
 @RunWith(classOf[JUnitRunner])
 class AuditServiceJavaWrapperTest extends FunSuite with BeforeAndAfter with Matchers {
@@ -16,15 +17,16 @@ class AuditServiceJavaWrapperTest extends FunSuite with BeforeAndAfter with Matc
   // Collaborators fixtures
 
   val ctx = new FunctionalConfigApplicationContext()
-  ctx.registerConfigurations(AuditServiceJavaWrapperTestConfig)
+  ctx.registerConfigurations(CamelMongoAuditServiceTestConfig)
+  ctx.refresh()
 
   // Data fixtures
 
   val event = new JAuditEvent(null, "message", Map("key" -> "value"), Array("tag1"))
 
   before {
-    mongoClient().dropDatabase(dbName)
-    javaAuditService().log(event)
+    mongoClient().dropDatabase(auditServiceDbName)
+    javaAuditService.log(event)
   }
 
   // Tests
