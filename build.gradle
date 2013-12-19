@@ -186,7 +186,7 @@ project('microon-services') {
 
     project('microon-services-repository') {
         dependencies {
-            compile 'org.springframework.data:spring-data-commons:1.5.2.RELEASE'
+            compile 'org.springframework.data:spring-data-commons:1.6.2.RELEASE'
             optional "com.mysema.querydsl:querydsl-jpa:${queryDslVersion}"
 
             optional "com.mysema.querydsl:querydsl-mongodb:${queryDslVersion}"
