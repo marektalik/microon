@@ -25,6 +25,7 @@ subprojects {
         scalapiVersion = '0.6'
         scalapiHibernateDependency = "com.github.scalapi:scalapi-hibernate:$scalapiVersion"
         scalapiQueryDslDependency = "com.github.scalapi:scalapi-querydsl:$scalapiVersion"
+        springDataVersion = '1.6.2.RELEASE'
         springScalaDependency = 'org.springframework.scala:spring-scala_2.10:1.0.0.RC1'
         queryDslVersion = '3.2.4'
     }
@@ -186,7 +187,7 @@ project('microon-services') {
 
     project('microon-services-repository') {
         dependencies {
-            compile 'org.springframework.data:spring-data-commons:1.6.2.RELEASE'
+            compile "org.springframework.data:spring-data-commons:$springDataVersion"
             optional "com.mysema.querydsl:querydsl-jpa:${queryDslVersion}"
 
             optional "com.mysema.querydsl:querydsl-mongodb:${queryDslVersion}"
