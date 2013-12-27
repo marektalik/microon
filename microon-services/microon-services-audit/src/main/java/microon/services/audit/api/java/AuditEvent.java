@@ -1,9 +1,10 @@
 package microon.services.audit.api.java;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AuditEvent {
+public class AuditEvent implements Serializable{
 
     private String id;
 
